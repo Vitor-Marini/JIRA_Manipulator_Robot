@@ -1,4 +1,4 @@
-# Projeto de Braço Robótico Separador de Objetos
+# Projeto Braço Robótico Separador de Objetos
 
 ## Objetivo
 
