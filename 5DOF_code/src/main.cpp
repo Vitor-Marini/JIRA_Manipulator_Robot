@@ -6,18 +6,13 @@ int led_azul=13;
 
 int valor;
 
-void home_position();
+//void home_position(int);
 
 void setup() {
 pinMode(led_azul,OUTPUT);
 pinMode(led_vermelho,OUTPUT);
 pinMode(led_verde,OUTPUT);
-digitalWrite(led_vermelho,LOW);
-digitalWrite(led_azul,LOW);
-digitalWrite(led_verde,LOW);
-
 Serial.begin(9600);
-
 }
 
 void loop() {
@@ -26,11 +21,27 @@ void loop() {
   }
 
 
+if(valor=='1'){
+  int valorfinal =valor;
+  digitalWrite(led_azul,HIGH);
+  //delay(20000);
+ // home_position(led_azul);
+}
+if(valor=='2'){
+  digitalWrite(led_verde,HIGH);
+  //delay(5000);
+  //home_position(led_verde);
+}
+if(valor=='3'){
+  digitalWrite(led_vermelho,HIGH);
+  //delay(5000);
+  //home_position(led_vermelho);
 }
 
 
 
+}
 
-void home_position(int led){
+/*void home_position(int led){
   digitalWrite(led,LOW);
-}
+} */
