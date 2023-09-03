@@ -1,18 +1,36 @@
 #include <Arduino.h>
 
-// put function declarations here:
-int myFunction(int, int);
+int  led_verde=12;
+int led_vermelho=25;
+int led_azul=13;
+
+int valor;
+
+void home_position();
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+pinMode(led_azul,OUTPUT);
+pinMode(led_vermelho,OUTPUT);
+pinMode(led_verde,OUTPUT);
+digitalWrite(led_vermelho,LOW);
+digitalWrite(led_azul,LOW);
+digitalWrite(led_verde,LOW);
+
+Serial.begin(9600);
+
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  if(Serial.available()>0){
+    valor=Serial.read();
+  }
+
+
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+
+
+
+void home_position(int led){
+  digitalWrite(led,LOW);
 }
