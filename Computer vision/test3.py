@@ -1,6 +1,6 @@
 import cv2
 
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
@@ -27,11 +27,13 @@ while True:
         color = "GREEN"
     elif hue_value < 131:
         color = "BLUE"
-    elif hue_value < 170:
-        color = "VIOLET"
+    elif hue_value < 150:
+        color = "PINK"
     else:
         color = "RED"
+  
 
+    print(color)
     pixel_center_bgr = frame[cy, cx]
     b, g, r = int(pixel_center_bgr[0]), int(pixel_center_bgr[1]), int(pixel_center_bgr[2])
 
