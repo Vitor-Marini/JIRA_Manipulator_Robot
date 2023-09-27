@@ -22,6 +22,8 @@ Servo servo_gipper_base;
 Servo servo_wrist;
 Servo servo_gripper;
 
+int velocidadeDEFAULT = 15;
+
 
 void setup() {
 servo_base.attach(16);
@@ -57,7 +59,7 @@ if(aux==0){
 
 servo_slow_move_BASE(0,90,15);
 delay(5000);
-servo_slow_move_BASE(90,0,15);
+home_pos();
 
 aux=aux+1;
 }
@@ -75,7 +77,7 @@ aux=aux+1;
 
 
 
-
+//FUNCS TO MOVE SERVO SLOWER, NOT AT "HIGH SPEED"(DISCLAIMER FUCK GIRA)
 
 void servo_slow_move_BASE(int pos_inicial,int pos_final, const int velocidade){
 if(pos_inicial<pos_final){
@@ -90,15 +92,91 @@ for (int pos = pos_inicial; pos <= pos_final; pos += 1) {
   }
 }
 
+void servo_slow_move_GRIPPER(int pos_inicial,int pos_final, const int velocidade){
+if(pos_inicial<pos_final){
+for (int pos = pos_inicial; pos <= pos_final; pos += 1) {
+    servo_gripper.write(pos);
+    delay(velocidade); 
+  }
+}else
+  for (int pos = pos_inicial; pos >= pos_final; pos -= 1) {
+    servo_gripper.write(pos);
+    delay(velocidade); 
+  }
+}
+
+void servo_slow_move_GRIPPER_BASE(int pos_inicial,int pos_final, const int velocidade){
+  if(pos_inicial<pos_final){
+for (int pos = pos_inicial; pos <= pos_final; pos += 1) {
+    servo_gipper_base.write(pos);
+    delay(velocidade); 
+  }
+}else
+  for (int pos = pos_inicial; pos >= pos_final; pos -= 1) {
+    servo_gipper_base.write(pos);
+    delay(velocidade); 
+  }
+}
+
+void servo_slow_move_FIRST_ARM(int pos_inicial,int pos_final, const int velocidade){
+if(pos_inicial<pos_final){
+for (int pos = pos_inicial; pos <= pos_final; pos += 1) {
+    servo_first_arm.write(pos);
+    delay(velocidade); 
+  }
+}else
+  for (int pos = pos_inicial; pos >= pos_final; pos -= 1) {
+    servo_first_arm.write(pos);
+    delay(velocidade); 
+  }
+}
+
+void servo_slow_move_SECOND_ARM(int pos_inicial,int pos_final, const int velocidade){
+  if(pos_inicial<pos_final){
+for (int pos = pos_inicial; pos <= pos_final; pos += 1) {
+    servo_second_arm.write(pos);
+    delay(velocidade); 
+  }
+}else
+  for (int pos = pos_inicial; pos >= pos_final; pos -= 1) {
+    servo_second_arm.write(pos);
+    delay(velocidade); 
+  }
+}
+
+void servo_slow_move_WRIST(int pos_inicial,int pos_final, const int velocidade){
+  if(pos_inicial<pos_final){
+for (int pos = pos_inicial; pos <= pos_final; pos += 1) {
+    servo_wrist.write(pos);
+    delay(velocidade); 
+  }
+}else
+  for (int pos = pos_inicial; pos >= pos_final; pos -= 1) {
+    servo_wrist.write(pos);
+    delay(velocidade); 
+  }
+}
+
 
 
 void home_pos(){
-servo_gripper.write(0);
-servo_base.write(0);
-servo_first_arm.write(50);
-servo_second_arm.write(0);
-servo_wrist.write(0);
-servo_gipper_base.write(0);
+
+int pos_base = servo_base.read();
+int pos_gripper = servo_gripper.read();
+int pos_gipper_base = servo_gipper_base.read();
+int pos_first_arm =servo_first_arm.read();
+int pos_second_arm = servo_second_arm.read();
+int pos_wrist = servo_wrist.read();
+
+
+servo_slow_move_BASE(pos_base,0,velocidadeDEFAULT);
+servo_slow_move_FIRST_ARM(pos_first_arm,50,velocidadeDEFAULT);
+servo_slow_move_SECOND_ARM(pos_second_arm,0,velocidadeDEFAULT);
+servo_slow_move_WRIST(pos_wrist,0,velocidadeDEFAULT);
+servo_slow_move_GRIPPER(pos_gripper,0,velocidadeDEFAULT);
+servo_slow_move_GRIPPER_BASE(pos_gipper_base,0,velocidadeDEFAULT);
+
+
 }
 
 
