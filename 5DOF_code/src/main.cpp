@@ -43,19 +43,24 @@ servo_gipper_base.write(0);
 */
 
 
-
+servo_base.write(0);
 
 }
 
 void loop() {
 
 
+delay(3000);
+int aux=0;
 
-
+if(aux==0){
 
 servo_slow_move_BASE(0,90,15);
+delay(5000);
+servo_slow_move_BASE(90,0,15);
 
-
+aux=aux+1;
+}
 
 
 
@@ -73,15 +78,18 @@ servo_slow_move_BASE(0,90,15);
 
 
 void servo_slow_move_BASE(int pos_inicial,int pos_final, const int velocidade){
-
-  for (int pos = pos_inicial; pos <= pos_final; pos += 1) {
+if(pos_inicial<pos_final){
+for (int pos = pos_inicial; pos <= pos_final; pos += 1) {
     servo_base.write(pos);
     delay(velocidade); 
   }
-
-
-
+}else
+  for (int pos = pos_inicial; pos >= pos_final; pos -= 1) {
+    servo_base.write(pos);
+    delay(velocidade); 
+  }
 }
+
 
 
 void home_pos(){
