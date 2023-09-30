@@ -7,7 +7,8 @@ int aux=0;
 int cont_start = 0;
 int speedDEFAULT = 15;
 int speedBASE = 5;
-
+int grippeCLOSE = 0;
+int gripperOPEN = 160;
 //SL0W MOVING FUNCS
 void servo_slow_move_BASE(int pos_inicial,int pos_final, const int speed);
 void servo_slow_move_GRIPPER(int pos_inicial,int pos_final, const int speed);
@@ -18,9 +19,10 @@ void servo_slow_move_WRIST(int pos_inicial,int pos_final, const int speed);
 
 //POSITION PRESETS
 void home_pos();
+void gripper_collect_default();//WIP
 void blue_pos();//WIP
 void pink_pos();//WIP
-void gripper_collect_default();//WIP
+
 
 //SERVOS DECLARATION
 Servo servo_base;
@@ -52,30 +54,37 @@ void loop() {
 
 //START ALL SERVOS AT DEFAULT POSITION,JUST TO ".read" FUNCTION WORK CORRECTLY. EX: READ FUNCTION ONLY WORKS CORRECTLY IF YOU ALRREDY WRITE A MOVMENT TO A SERVO, LIKE IF YOU DONT START THE SERVO IT WILL READ A HUGE NUMBER(microseconds)
 if(cont_start==0){
-servo_gripper.write(90);
+servo_gripper.write(0);
 servo_base.write(90);
-servo_first_arm.write(90);
-servo_second_arm.write(90);
+servo_first_arm.write(100);
+servo_second_arm.write(60);
 servo_wrist.write(90);
-servo_gipper_base.write(90);
+servo_gipper_base.write(100);
 
-cont_start=99;
+cont_start=1;
 }
 
 //"VOID LOOP"
 
+
+
+
+
+
+
+
+if(aux==0){
+  
+
+blue_pos();
+
+
 delay(3000);
-servo_slow_move_BASE(servo_base.read()+1,190,speedBASE);
-delay(3000);
-servo_slow_move_BASE(servo_base.read()+1,0,speedBASE);
 
+pink_pos();
 
-
-
-
-
-
-
+  aux=1;
+}
 
 
 
@@ -185,22 +194,47 @@ int pos_wrist = servo_wrist.read();
 
 
 //SEQUECE OF MOVMENTES TO DEFAULT POSITON, "+1" IS USED TO FIX THE READS, EX: READING A SERVO AT 0 DEGRESS IS "-1", SO YOU ADD 1 "EXTRA DEGREE" TO FIX IT AND NOT BUG THE CODE
-servo_slow_move_BASE(pos_base+1,90,speedDEFAULT);
-servo_slow_move_FIRST_ARM(pos_first_arm+1,90,speedDEFAULT);//50 IS BECAUSE ON THE REAL ARM(PHISICAL) SERVO IS SIDEWAY SO 50 KEEP ARM VERTICAL :)
-servo_slow_move_SECOND_ARM(pos_second_arm+1,90,speedDEFAULT);
+servo_slow_move_BASE(pos_base+1,90,speedBASE);
+servo_slow_move_FIRST_ARM(pos_first_arm+1,100,speedDEFAULT);//50 IS BECAUSE ON THE REAL ARM(PHISICAL) SERVO IS SIDEWAY SO 50 KEEP ARM VERTICAL :)
+servo_slow_move_SECOND_ARM(pos_second_arm+1,60,speedDEFAULT);
 servo_slow_move_WRIST(pos_wrist+1,90,speedDEFAULT);
-servo_slow_move_GRIPPER(pos_gripper+1,90,speedDEFAULT);
+servo_slow_move_GRIPPER(pos_gripper+1,grippeCLOSE,speedDEFAULT);
 servo_slow_move_GRIPPER_BASE(pos_gipper_base+1,90,speedDEFAULT);
 
 }
 
 
 
+void gripper_collect_default(){
+servo_slow_move_GRIPPER(servo_gripper.read()+1,gripperOPEN,speedDEFAULT);
+
+servo_slow_move_FIRST_ARM(servo_first_arm.read()+1,65,speedDEFAULT);
+
+servo_slow_move_SECOND_ARM(servo_second_arm.read()+1,150,speedDEFAULT);
+
+servo_slow_move_GRIPPER_BASE(servo_gipper_base.read()+1,35,speedDEFAULT);
+
+servo_slow_move_GRIPPER(servo_gripper.read()+1,grippeCLOSE,speedDEFAULT);
+delay(1000);
+servo_slow_move_FIRST_ARM(servo_first_arm.read()+1,100,speedDEFAULT);
+delay(2000);
+
+servo_slow_move_GRIPPER_BASE(servo_gipper_base.read()+1,100,speedDEFAULT);
+
+}
+
+
+
+
+
+
+
 void blue_pos(){
 gripper_collect_default();
-
-//MOVMENTS
-
+delay(1000);
+servo_slow_move_BASE(servo_base.read()+1,0,speedBASE);
+servo_slow_move_GRIPPER(servo_gripper.read()+1,gripperOPEN,speedDEFAULT);
+delay(2000);
  home_pos();
 }
 
@@ -208,21 +242,11 @@ gripper_collect_default();
 
 void pink_pos(){
 gripper_collect_default();
-
-//MOVMENTS
-
-home_pos();
-}
-
-
-
-void gripper_collect_default(){
-
-
-servo_slow_move_FIRST_ARM(50,0,speedDEFAULT);
-servo_slow_move_SECOND_ARM(0,90,speedDEFAULT);
-servo_slow_move_GRIPPER(0,90,speedDEFAULT);
-
+delay(1000);
+servo_slow_move_BASE(servo_base.read()+1,180,speedBASE);
+servo_slow_move_GRIPPER(servo_gripper.read()+1,gripperOPEN,speedDEFAULT);
+delay(2000);
+ home_pos();
 }
 
 
@@ -230,41 +254,3 @@ servo_slow_move_GRIPPER(0,90,speedDEFAULT);
 
 
 
-/*if(int pos_base = servo_base.read()>180){
-  pos_base=0;
-}else{
-   pos_base = servo_base.read();
-}
-
-
-if(int pos_gripper = servo_gripper.read()>180){
-  pos_gripper=0;
-}else{
-  pos_gripper = servo_gripper.read();
-}
-
-if(int pos_gipper_base = servo_gipper_base.read()>180){
-  pos_gipper_base = 0;
-}else{
-  pos_gipper_base = servo_gipper_base.read();
-}
-
-if(int pos_first_arm =servo_first_arm.read()>180){
-  pos_first_arm=50;
-}else{
-  pos_first_arm =servo_first_arm.read();
-}
-
-if(int pos_second_arm = servo_second_arm.read()>180){
-  pos_second_arm=0;
-}else{
-   pos_second_arm = servo_second_arm.read();
-}
-
-if(int pos_wrist = servo_wrist.read()>180){
-  pos_wrist=0;
-}else{
-   pos_wrist = servo_wrist.read();
-}
-
-*/
