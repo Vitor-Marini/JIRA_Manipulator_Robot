@@ -17,6 +17,9 @@ void servo_slow_move_FIRST_ARM(int pos_inicial,int pos_final, const int speed);
 void servo_slow_move_SECOND_ARM(int pos_inicial,int pos_final, const int speed);
 void servo_slow_move_WRIST(int pos_inicial,int pos_final, const int speed);
 
+void gripper_CLAMP()
+void gripper_RELEASE()
+
 //POSITION PRESETS
 void home_pos();
 void gripper_collect_default();//WIP
@@ -225,7 +228,21 @@ servo_slow_move_GRIPPER_BASE(servo_gipper_base.read()+1,100,speedDEFAULT);
 
 
 
+void gripper_CLAMP(){
+servo_slow_move_GRIPPER(servo_gripper))
 
+}
+
+
+
+]
+
+
+void gripper_RELEASE()[
+
+
+
+]
 
 
 
