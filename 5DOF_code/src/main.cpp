@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include<ESP32Servo.h>
 
-
-
+int control =0;
+char data_recived;
 int aux=0;
 int cont_start = 0;
 int speedDEFAULT = 15;
@@ -38,23 +38,25 @@ Servo servo_gripper;
 void setup() {
 
 //SERVO ATTACHS
-servo_base.attach(19);
+servo_gripper.attach(15);
+servo_gipper_base.attach(16);
 servo_first_arm.attach(17);
 servo_second_arm.attach(18);
-servo_gipper_base.attach(16);
+servo_base.attach(19);
 servo_wrist.attach(21);
-servo_gripper.attach(15);
 
-Serial.begin(115200);
+
+Serial.begin(9600);
 
 }
+
 
 void loop() {
 
 
 //START ALL SERVOS AT DEFAULT POSITION,JUST TO ".read" FUNCTION WORK CORRECTLY. EX: READ FUNCTION ONLY WORKS CORRECTLY IF YOU ALRREDY WRITE A MOVMENT TO A SERVO, LIKE IF YOU DONT START THE SERVO IT WILL READ A HUGE NUMBER(microseconds)
 if(cont_start==0){
-servo_gripper.write(0);
+servo_gripper.write(grippeCLOSE);
 servo_base.write(90);
 servo_first_arm.write(100);
 servo_second_arm.write(60);
@@ -66,28 +68,27 @@ cont_start=1;
 
 //"VOID LOOP"
 
-
-
-
-
-
-
-
-if(aux==0){
-  
-
-blue_pos();
-
-
-delay(3000);
-
-pink_pos();
-
-  aux=1;
+if(Serial.available()>0){ 
+  data_recived= Serial.read();
 }
 
 
 
+if(data_recived=='1'){
+  blue_pos();
+  while (Serial.available() > 0) {
+        Serial.read(); // Limpa quaisquer caracteres adicionais na fila
+      }
+      data_recived = 0; // Redefina a variável após a execução
+
+}else if(data_recived=='2'){
+ pink_pos();
+ while (Serial.available()>0){
+  Serial.read();
+ }
+ data_recived=0;
+ 
+}
 
 
 
