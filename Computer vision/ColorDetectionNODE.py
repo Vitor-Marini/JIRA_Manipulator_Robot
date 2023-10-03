@@ -1,4 +1,13 @@
 import cv2
+import serial
+
+
+esp32 = serial.Serial('/dev/ttyUSB0',9600)
+
+
+
+
+
 
 cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
@@ -27,13 +36,26 @@ while True:
         color = "GREEN"
     elif hue_value < 131:
         color = "BLUE"
-    elif hue_value < 150:
-        color = "PINK"
+    elif hue_value < 170:
+        color = "VIOLET"
     else:
         color = "RED"
-  
 
     print(color)
+
+    if color == "BLUE":
+        esp32.write(b'1')
+    elif color =="GREEN":
+        esp32.write(b'2')
+    else:
+        esp32.write(b'3')
+  
+
+
+
+
+
+
     pixel_center_bgr = frame[cy, cx]
     b, g, r = int(pixel_center_bgr[0]), int(pixel_center_bgr[1]), int(pixel_center_bgr[2])
 
@@ -43,8 +65,9 @@ while True:
 
     cv2.imshow("Frame", frame)
     key = cv2.waitKey(1)
-    if key == 27:
+    if key == 0:
         break
 
 cap.release()
 cv2.destroyAllWindows()
+
