@@ -8,7 +8,10 @@ int cont_start = 0;
 int speedDEFAULT = 15;
 int speedBASE = 5;
 int grippeCLOSE = 0;
-int gripperOPEN = 160;
+int gripperOPEN = 60;
+
+
+
 //SL0W MOVING FUNCS
 void servo_slow_move_BASE(int pos_inicial,int pos_final, const int speed);
 void servo_slow_move_GRIPPER(int pos_inicial,int pos_final, const int speed);
