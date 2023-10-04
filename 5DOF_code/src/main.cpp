@@ -1,9 +1,8 @@
 #include <Arduino.h>
 #include<ESP32Servo.h>
 
-int control =0;
-char data_recived;
-int aux=0;
+
+char data_recived;//recebe a cor do OpenCV
 int cont_start = 0;
 int speedDEFAULT = 15;
 int speedBASE = 5;
@@ -24,9 +23,9 @@ void servo_slow_move_WRIST(int pos_inicial,int pos_final, const int speed);
 
 //POSITION PRESETS
 void home_pos();
-void gripper_collect_default();//WIP
-void blue_pos();//WIP
-void pink_pos();//WIP
+void gripper_collect_default();
+void blue_pos();
+void pink_pos();
 
 
 //SERVOS DECLARATION
