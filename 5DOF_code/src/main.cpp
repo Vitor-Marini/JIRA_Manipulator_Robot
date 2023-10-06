@@ -23,6 +23,7 @@ void servo_slow_move_WRIST(int pos_inicial,int pos_final, const int speed);
 
 //POSITION PRESETS
 void home_pos();
+void home_pos2();
 void gripper_collect_default();
 void blue_pos();
 void pink_pos();
@@ -58,7 +59,7 @@ Serial.begin(9600);
 void loop() {
 
 
-//START ALL SERVOS AT DEFAULT POSITION,JUST TO ".read" FUNCTION WORK CORRECTLY. EX: READ FUNCTION ONLY WORKS CORRECTLY IF YOU ALRREDY WRITE A MOVMENT TO A SERVO, LIKE IF YOU DONT START THE SERVO IT WILL READ A HUGE NUMBER(microseconds)
+//START ALL SERVOS AT DEFAULT POSITION,JUST TO ".read" FUNCTION WORK CORRECTLY. EX: READ FUNCTION ONLY WORKS CORRECTLY IF YOU ALRREDY WRITE A MOVMENT TO A SERVO, LIKE IF YOU DONT START THE SERVO IT WILL READ A HUGE NUMBER(microseconds)Disclaimer initializin on setuo seens not work
 if(cont_start==0){
 servo_gripper.write(grippeCLOSE);
 servo_base.write(90);
@@ -70,7 +71,7 @@ servo_gipper_base.write(100);
 cont_start=1;
 }
 
-//"VOID LOOP"
+
 
 if(Serial.available()>0){ 
   data_recived= Serial.read();
@@ -81,17 +82,17 @@ if(Serial.available()>0){
 if(data_recived=='1'){
   blue_pos();
   while (Serial.available() > 0) {
-        Serial.read(); // Limpa quaisquer caracteres adicionais na fila
+        Serial.read(); 
       }
-      data_recived = 0; // Redefina a variável após a execução
+      data_recived = 0; 
 
 }else if(data_recived=='2'){
  pink_pos();
  while (Serial.available()>0){
-  Serial.read();
- }
- data_recived=0;
- 
+    Serial.read();
+  }
+   data_recived=0;
+  
 }
 
 
@@ -200,7 +201,7 @@ int pos_wrist = servo_wrist.read();
 
 //SEQUECE OF MOVMENTES TO DEFAULT POSITON, "+1" IS USED TO FIX THE READS, EX: READING A SERVO AT 0 DEGRESS IS "-1", SO YOU ADD 1 "EXTRA DEGREE" TO FIX IT AND NOT BUG THE CODE
 servo_slow_move_BASE(pos_base+1,90,speedBASE);
-servo_slow_move_FIRST_ARM(pos_first_arm+1,100,speedDEFAULT);//50 IS BECAUSE ON THE REAL ARM(PHISICAL) SERVO IS SIDEWAY SO 50 KEEP ARM VERTICAL :)
+servo_slow_move_FIRST_ARM(pos_first_arm+1,100,speedDEFAULT);//50 IS BECAUSE ON THE REAL ARM(PHISICAL) SERVO IS SIDEWAY SO 50 KEEP ARM VERTICAL
 servo_slow_move_SECOND_ARM(pos_second_arm+1,60,speedDEFAULT);
 servo_slow_move_WRIST(pos_wrist+1,90,speedDEFAULT);
 servo_slow_move_GRIPPER(pos_gripper+1,grippeCLOSE,speedDEFAULT);
