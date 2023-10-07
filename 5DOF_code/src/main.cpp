@@ -209,7 +209,15 @@ servo_slow_move_GRIPPER_BASE(pos_gipper_base+1,90,speedDEFAULT);
 
 }
 
+void home_pos2(){
+servo_slow_move_BASE(servo_base.read()+1,90,speedBASE);
+servo_slow_move_FIRST_ARM(servo_first_arm.read()+1,30,speedDEFAULT);
+servo_slow_move_SECOND_ARM(servo_second_arm.read()+1,170,speedDEFAULT);
+servo_slow_move_WRIST(servo_wrist.read()+1,120,speedDEFAULT);
+servo_slow_move_GRIPPER_BASE(servo_gripper.read()+1,120,speedDEFAULT);
+servo_slow_move_GRIPPER(servo_gripper.read()+1,gripperOPEN,speedDEFAULT);
 
+}
 
 void gripper_collect_default(){
 servo_slow_move_GRIPPER(servo_gripper.read()+1,gripperOPEN,speedDEFAULT);
