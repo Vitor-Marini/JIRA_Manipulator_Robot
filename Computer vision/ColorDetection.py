@@ -30,6 +30,9 @@ while True:
         contours, _ = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         for contour in contours:
+            # Caso o algoritmo não detecte os bloquinhos alterar para:
+            # Para detectar objetos menores podemos usar o if abaixo substituindo o existente (testar pra ver se o threshold de 100 detecta o bloquinho)
+            # if cv2.contourArea(contour) > 100
             if cv2.contourArea(contour) > 500:
                 x, y, w, h = cv2.boundingRect(contour)
                 cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
@@ -37,7 +40,7 @@ while True:
 
                 """
                 OBS: É necessário testar.
-                
+
                 Se mais de uma cor for detectada no vídeo, 
                 o código desenhará a bounding box  e os textos para cada cor detectada. 
                 Porém, o código enviará para a ESP32 apenas um sinal para a última cor detectada na ordem em que foi definido o dicionário de cores.
