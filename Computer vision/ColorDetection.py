@@ -1,11 +1,15 @@
 from utils import get_limits
 import cv2
+# import serial
 
 colors = {
     'red': [0, 0, 255],
     'green': [0, 255, 0],
     'blue': [255, 0, 0],
 }
+
+
+# esp32 = serial.Serial('/dev/ttyUSB0',9600)
 
 cap = cv2.VideoCapture(0)
 
@@ -30,6 +34,29 @@ while True:
                 x, y, w, h = cv2.boundingRect(contour)
                 cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
                 cv2.putText(frame, color_name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
+
+                """
+                OBS: É necessário testar.
+                
+                Se mais de uma cor for detectada no vídeo, 
+                o código desenhará a bounding box  e os textos para cada cor detectada. 
+                Porém, o código enviará para a ESP32 apenas um sinal para a última cor detectada na ordem em que foi definido o dicionário de cores.
+
+                colors = {
+                'red': [0, 0, 255],
+                'green': [0, 255, 0],
+                'blue': [255, 0, 0],
+                }
+
+                Isso ocontece porque a lógica if-else para comunicar as cores com o ESP32 está localizada dentro do loop onde nós iteramos sobre os contornos. 
+                Se forem detectadas múltiplas cores, o sinal da última cor detectada substituirá os sinais anteriores.
+                """  
+                #if color_name == "blue":
+                    #esp32.write(b'1')
+                #elif color_name == "green":
+                    #esp32.write(b'2')
+                #else:
+                    #esp32.write(b'3')
 
     cv2.imshow('frame', frame)
 
