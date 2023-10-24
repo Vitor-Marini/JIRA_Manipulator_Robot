@@ -2,14 +2,15 @@
 #include<ESP32Servo.h>
 
 
-char data_recived;//recebe a cor do OpenCV
+char data_received;//recebe a cor do OpenCV
 int cont_start = 0;
 int speedDEFAULT = 15;
 int speedBASE = 5;
-int grippeCLOSE = 0;
+int grippeCLOSE = 10;
 int gripperOPEN = 60;
 
-
+//FUNCTION TO CLEAR THE LIST IN SERIAL PORT
+void clear_serial();
 
 //SL0W MOVING FUNCS
 void servo_slow_move_BASE(int pos_inicial,int pos_final, const int speed);
@@ -74,26 +75,29 @@ cont_start=1;
 
 
 if(Serial.available()>0){ 
-  data_recived= Serial.read();
+  data_received= Serial.read();
 }
 
 
 
-if(data_recived=='1'){
+if(data_received=='1'){
   blue_pos();
   while (Serial.available() > 0) {
         Serial.read(); 
       }
-      data_recived = 0; 
+      data_received = 0; 
 
-}else if(data_recived=='2'){
- pink_pos();
- while (Serial.available()>0){
-    Serial.read();
-  }
-   data_recived=0;
   
 }
+else if(data_received=='2'){
+ pink_pos();
+ while (Serial.available() > 0) {
+        Serial.read(); 
+      }
+      data_received = 0; 
+
+ 
+}
 
 
 
@@ -102,6 +106,13 @@ if(data_recived=='1'){
 
 }
 
+void clear_serial(){
+while (Serial.available() > 0) {
+        Serial.read(); 
+      }
+      data_received = 0; 
+
+}
 
 
 //FUNCS TO MOVE SERVO SLOWER, NOT AT "HIGH SPEED"(DISCLAIMER FUCK GIRA)... RECIVES THE ACTUAL POSITION , END POSITION AND SPEED OF SERVO MOVMENT
