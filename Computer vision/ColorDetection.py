@@ -35,10 +35,10 @@ cap = cv2.VideoCapture(3)
 while True:
     ret, frame = cap.read()
     frame_height, frame_width = frame.shape[:2]
-    roi_top = int(frame_height * 0.5) 
-    roi_bottom = int(frame_height * 0.6)
-    roi_left = int(frame_width * 0.45)
-    roi_right = int(frame_width * 0.55)
+    roi_top = int(frame_height * 0.4) 
+    roi_bottom = int(frame_height * 0.7)
+    roi_left = int(frame_width * 0.35)
+    roi_right = int(frame_width * 0.65)
     
     hsvImage = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
@@ -53,10 +53,13 @@ while True:
 
         contours, _ = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+        cv2.rectangle(frame, (roi_left, roi_top), (roi_right, roi_bottom), (0,223 ,255 ), 2)
+        cv2.putText(frame, "Area Detection", (roi_left - 20, roi_top-10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,223,255), 2)
+
         for contour in contours:
             # Caso o algoritmo não detecte os bloquinhos alterar para:
             # Para detectar objetos menores podemos usar o if abaixo substituindo o existente (testar pra ver se o threshold de 100 detecta o bloquinho)
-             if cv2.contourArea(contour) > 100:
+             if cv2.contourArea(contour) > 500:
 
             #if cv2.contourArea(contour) > 500:
                 x, y, w, h = cv2.boundingRect(contour)
@@ -73,11 +76,9 @@ while True:
                     else:
                         esp32.write(b'3')
     # Desenha a região de intersse (ROI)
-                cv2.rectangle(frame, (roi_left, roi_top), (roi_right, roi_bottom), (255, 255, 255), 2)
-                cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
-                cv2.putText(frame, color_name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
+                
 
-                """
+    """
                 OBS: É necessário testar.
 
                 Se mais de uma cor for detectada no vídeo, 
