@@ -31,14 +31,18 @@ cap = cv2.VideoCapture(3)
 
 
 
-
 while True:
     ret, frame = cap.read()
     frame_height, frame_width = frame.shape[:2]
-    roi_top = int(frame_height * 0.4) 
-    roi_bottom = int(frame_height * 0.7)
-    roi_left = int(frame_width * 0.35)
-    roi_right = int(frame_width * 0.65)
+    if frame is not None:
+        frame = cv2.resize(frame,(1280,720))
+    else:
+        print("Erro no resize")
+    roi_size = 200
+    roi_top = int(frame_height - roi_size / 2) 
+    roi_bottom = int(frame_height + roi_size / 2)
+    roi_left = int(frame_width - roi_size / 2)
+    roi_right = int(frame_width + roi_size / 2)
     
     hsvImage = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
@@ -54,7 +58,7 @@ while True:
         contours, _ = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         cv2.rectangle(frame, (roi_left, roi_top), (roi_right, roi_bottom), (0,223 ,255 ), 2)
-        cv2.putText(frame, "Area Detection", (roi_left - 20, roi_top-10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,223,255), 2)
+        cv2.putText(frame, "Area Detection", (roi_left - 12, roi_top-10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,223,255), 2)
 
         for contour in contours:
             # Caso o algoritmo não detecte os bloquinhos alterar para:
@@ -69,6 +73,7 @@ while True:
                 if roi_left < center_x < roi_right and roi_top < center_y < roi_bottom:
                     cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
                     cv2.putText(frame, color_name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
+
                     if color_name == "blue":
                         esp32.write(b'1')
                     elif color_name == "green":
