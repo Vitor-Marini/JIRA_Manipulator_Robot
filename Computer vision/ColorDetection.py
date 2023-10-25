@@ -27,15 +27,19 @@ colors = {
 
 esp32 = serial.Serial('/dev/ttyUSB0',9600)
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(3)
+
+
+
 
 while True:
     ret, frame = cap.read()
     frame_height, frame_width = frame.shape[:2]
-    roi_top = 500
-    roi_bottom = roi_top + 100
-    roi_left = int(frame_width / 2 - 50)
-    roi_right = int(frame_width / 2 + 50)
+    roi_top = int(frame_height * 0.5) 
+    roi_bottom = int(frame_height * 0.6)
+    roi_left = int(frame_width * 0.45)
+    roi_right = int(frame_width * 0.55)
+    
     hsvImage = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     for color_name, color in colors.items():
