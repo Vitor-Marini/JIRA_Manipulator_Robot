@@ -1,21 +1,41 @@
 from utils import get_limits
 import cv2
-# import serial
+import serial
+from threading import Thread
+
+class VideoSteam:
+    def __init__(self,src=0):
+        self.stream = cv2.VideoCapture(src)
+        self.ret, self.frame = self.stream.read()
+        self.thread = Thread(target=self.update,args=())
+        self.thread.daemon = True
+        self.thread.start()
+    def update(self):
+        while True:
+            self.ret, self.frame = self.stream.read()
+    
+    def read(self):
+        return self.frame
+    
 
 colors = {
-    'red': [0, 0, 255],
+    'red': [0, 0, 128],
     'green': [0, 255, 0],
-    'blue': [255, 0, 0],
+    'blue': [184, 123, 0],
 }
 
 
-# esp32 = serial.Serial('/dev/ttyUSB0',9600)
+esp32 = serial.Serial('/dev/ttyUSB0',9600)
 
 cap = cv2.VideoCapture(0)
 
 while True:
     ret, frame = cap.read()
-
+    frame_height, frame_width = frame.shape[:2]
+    roi_top = 500
+    roi_bottom = roi_top + 100
+    roi_left = int(frame_width / 2 - 50)
+    roi_right = int(frame_width / 2 + 50)
     hsvImage = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     for color_name, color in colors.items():
@@ -32,9 +52,24 @@ while True:
         for contour in contours:
             # Caso o algoritmo não detecte os bloquinhos alterar para:
             # Para detectar objetos menores podemos usar o if abaixo substituindo o existente (testar pra ver se o threshold de 100 detecta o bloquinho)
-            # if cv2.contourArea(contour) > 100
-            if cv2.contourArea(contour) > 500:
+             if cv2.contourArea(contour) > 100:
+
+            #if cv2.contourArea(contour) > 500:
                 x, y, w, h = cv2.boundingRect(contour)
+                center_x = x + w / 2
+                center_y = y + h / 2 
+                # Verifica o centro
+                if roi_left < center_x < roi_right and roi_top < center_y < roi_bottom:
+                    cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
+                    cv2.putText(frame, color_name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
+                    if color_name == "blue":
+                        esp32.write(b'1')
+                    elif color_name == "green":
+                         esp32.write(b'2')
+                    else:
+                        esp32.write(b'3')
+    # Desenha a região de intersse (ROI)
+                cv2.rectangle(frame, (roi_left, roi_top), (roi_right, roi_bottom), (255, 255, 255), 2)
                 cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
                 cv2.putText(frame, color_name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
 
@@ -54,12 +89,12 @@ while True:
                 Isso ocontece porque a lógica if-else para comunicar as cores com o ESP32 está localizada dentro do loop onde nós iteramos sobre os contornos. 
                 Se forem detectadas múltiplas cores, o sinal da última cor detectada substituirá os sinais anteriores.
                 """  
-                #if color_name == "blue":
-                    #esp32.write(b'1')
-                #elif color_name == "green":
-                    #esp32.write(b'2')
-                #else:
-                    #esp32.write(b'3')
+              #  if color_name == "blue":
+                #    esp32.write(b'1')
+              #  elif color_name == "green":
+               #     esp32.write(b'2')
+             #   else:
+                #    esp32.write(b'3')
 
     cv2.imshow('frame', frame)
 
