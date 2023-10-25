@@ -58,12 +58,12 @@ while True:
         contours, _ = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         cv2.rectangle(frame, (roi_left, roi_top), (roi_right, roi_bottom), (0,223 ,255 ), 2)
-        cv2.putText(frame, "Area Detection", (roi_left - 12, roi_top-10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,223,255), 2)
+        cv2.putText(frame, "Detection Area", (roi_left - 12, roi_top-10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,223,255), 2)
 
         for contour in contours:
             # Caso o algoritmo não detecte os bloquinhos alterar para:
             # Para detectar objetos menores podemos usar o if abaixo substituindo o existente (testar pra ver se o threshold de 100 detecta o bloquinho)
-             if cv2.contourArea(contour) > 500:
+             if cv2.contourArea(contour) > 250:
 
             #if cv2.contourArea(contour) > 500:
                 x, y, w, h = cv2.boundingRect(contour)
