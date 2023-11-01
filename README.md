@@ -1,6 +1,6 @@
 # Projeto Manipulador Robótico
 
-*[Vídeo Demonstração do Projeto](https://www.youtube.com/watch?v=A0sSD6-C9No)
+* [Vídeo Demonstração do Projeto](https://www.youtube.com/watch?v=A0sSD6-C9No)
 
 ## Referências
 
