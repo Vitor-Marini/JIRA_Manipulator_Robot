@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Jira</title>
+  
+    
+</head>
+<body>
+
+    <div class="header">
+       
+        <div class="dropdown">
+            <button class="dropbtn"></i><i class="fa fa-cog" style="font-size: 25px;"></i></button>
+            <div class="dropdown-content">
+                <a href="/">DashBoard</a>
+                <a href="/page2">Manual Mode</a>
+                <a href="/page3">Custom</a>
+                <!-- Mais links para outras páginas conforme necessário -->
+            </div>
+        </div>
+        Jira DashBoard
+    </div>
+
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+  
+        <div class="container_data2"> 
+           <h1>Custom Mode</h1>
+        </div>
+        
+        <div id="movementsContainer">
+            <div class="flex-container-c">
+              <div class="container-c">
+                <div class="selectdiv">
+                  <select class="motorSelector">
+                    <!-- As opções serão carregadas dinamicamente via JavaScript -->
+                  </select>
+                </div>
+                <input type="number" class="angle-input" min="0" max="180" placeholder="0-180">
+                <button class="closeButton">&times;</button>
+              </div>
+            </div>
+          </div>
+          <button class="button_plus" id="addMovement"></button>
+          <div class="spacer"></div>
+        
+          <div id="profileControls">
+            <input type="text" id="profileName" placeholder="Enter profile name">
+            <button id="saveProfile">Save Profile</button>
+          </div>
+
+          <div class="spacer"></div>
+          <div class="spacer"></div>
+      
+          <label for="profileSelector" class="text1">Select Profile:</label>
+          <div class="flex-container-c2">
+            <div class="container-c2">
+              <div class="selectdiv2">
+                <select id="profileSelector" class="profileselect">
+                  <!-- As opções serão carregadas dinamicamente via JavaScript -->
+                </select>
+                <p id="noProfilesMessage" style="display: none;">Nenhum perfil salvo.</p>
+              </div>
+            </div>
+            <button style="background-color: lightgreen;"  id="playProfile">PLAY</button>
+          </div>
+             
+        
+        
+            
+        
+        
+          
+<script src="/script.js"></script>
+</body>
+</html>
+
+

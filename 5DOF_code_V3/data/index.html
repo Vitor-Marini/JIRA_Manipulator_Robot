@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Jira</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+</head>
+<body>
+    <div class="header">
+       
+        <div class="dropdown">
+            <button class="dropbtn"><i class="fa fa-cog" style="font-size: 25px;"></i></button>
+            <div class="dropdown-content">
+                <a href="/">DashBoard</a>
+                <a href="/page2">Manual Mode</a>
+                <a href="/page3">Custom</a>
+                <!-- Mais links para outras páginas conforme necessário -->
+            </div>
+        </div>
+        Jira DashBoard
+    </div>
+
+    <div class="spacer"></div> 
+    
+    <h1>Servos Position:</h1>
+    
+
+ 
+
+
+
+
+    <div class="flex-container">
+        <div class="item-wrapper">
+            <div class="flex-item"><div class="container"><div class="text1">Base</div><div role="progressbar"  style="--value:0; --deg:0;" ></div> </div></div>
+        </div>
+        <div class="item-wrapper">
+            <div class="flex-item"><div class="container"><div class="text1">First ARM</div><div role="progressbar"  style="--value:0; --deg:0;"></div> </div></div>
+        </div>
+        <div class="item-wrapper">
+            <div class="flex-item"><div class="container"><div class="container_dat"></div><div class="text1">Second ARM</div><div role="progressbar"  style="--value:0; --deg:0;"></div> </div></div>
+        </div>
+        <div class="item-wrapper">
+            <div class="flex-item"><div class="container"><div class="text1">Wrist</div><div role="progressbar"  style="--value:0; --deg:0;"></div> </div></div>
+        </div>
+        <div class="item-wrapper">
+            <div class="flex-item"><div class="container"><div class="text1">Base Gripper</div><div role="progressbar"  style="--value:0; --deg:0;"></div> </div></div>
+        </div>
+        <div class="item-wrapper">
+            <div class="flex-item"><div class="container"><div class="text1">Gripper</div><div role="progressbar"  style="--value:0; --deg:0;"></div> </div></div>
+        </div>
+    </div>
+  
+    <div class="spacer"></div>
+
+        
+        <button class="moveButton" data-position-number="1">Blue</button>
+        <button class="moveButton" data-position-number="2">Red</button>
+        <div class="spacer"></div>
+        <button class="moveButton" data-position-number="3">Green</button>
+        <button class="moveButton" style="background-color: red;" data-position-number="4">Reset</button>
+  
+ 
+
+
+
+
+
+
+<script src="/script.js"></script>
+</body>
+</html>

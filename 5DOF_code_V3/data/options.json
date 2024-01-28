@@ -1,0 +1,10 @@
+{
+  "servos": [
+    {"id": "servo1", "name": "Base"},
+    {"id": "servo2", "name": "First Arm"},
+    {"id": "servo3", "name": "Second Arm"},
+    {"id": "servo4", "name": "Wrist"},
+    {"id": "servo5", "name": "Base Gripper"},
+    {"id": "servo6", "name": "Gripper"}
+  ]
+}

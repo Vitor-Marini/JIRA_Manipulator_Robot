@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Jira</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+</head>
+<body>
+
+    <div class="header">
+       
+        <div class="dropdown">
+            <button class="dropbtn"></i><i class="fa fa-cog" style="font-size: 25px;"></i></button>
+            <div class="dropdown-content">
+                <a href="/">DashBoard</a>
+                <a href="/page2">Manual Mode</a>
+                <a href="/page3">Custom</a>
+                <!-- Mais links para outras páginas conforme necessário -->
+            </div>
+        </div>
+        Jira DashBoard
+    </div>
+
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+
+    <div class="flex-container">
+        <div class="container_data2">
+            <h1>Ativar Modo Manual:</h1>
+            <label class="switch" for="checkbox">
+                <input type="checkbox" id="checkbox" onchange="handleManualMode(this)" />
+                <div class="slider round"></div>
+            </label>
+        </div>
+    </div>
+    <div class="spacer"></div>
+    
+   <!-- QUANDO APERTAR NO BOTAO/SLIDER/CHECKBOX fazer uma requisiçao para saber o grua atual dos servos e entao atualizar o value -->
+      
+   <div class="flex-container2">
+
+  
+    <div class="slider-container">
+        <label for="servoBase">Base:</label>
+        <input type="range" id="servo1" min="0" max="180" value="10" class="custom-slider" oninput="document.getElementById('servo1Value').innerText = this.value">
+        <span id="servo1Value">90</span>°
+    </div>
+    <div class="slider-container">
+        <label for="servoFirstArm">First Arm:</label>
+        <input type="range" id="servo2" min="0" max="180" value="90" class="custom-slider" oninput="document.getElementById('servo2Value').innerText = this.value">
+        <span id="servo2Value">90</span>°
+    </div>
+    <div class="slider-container">
+        <label for="servoSecondArm">Second Arm:</label>
+        <input type="range" id="servo3" min="0" max="180" value="90" class="custom-slider" oninput="document.getElementById('servo3Value').innerText = this.value">
+        <span id="servo3Value">90</span>°
+    </div>
+    <div class="slider-container">
+        <label for="servoWrist">Wrist:</label>
+        <input type="range" id="servo4" min="0" max="180" value="90" class="custom-slider" oninput="document.getElementById('servo4Value').innerText = this.value">
+        <span id="servo4Value">90</span>°
+    </div>
+    <div class="slider-container">
+        <label for="servoBaseGripper">Base Gripper:</label>
+        <input type="range" id="servo5" min="0" max="180" value="90" class="custom-slider" oninput="document.getElementById('servo5Value').innerText = this.value">
+        <span id="servo5Value">90</span>°
+    </div>
+    <div class="slider-container2">
+    <label >Gripper:</label>
+    <button class="moveButton" data-position-number="5">Open/Close</button> <button class="moveButton" style="background-color: red;" data-position-number="4">Reset</button>
+    </div>
+   
+        
+</div>
+
+    
+<script src="/script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+<!-- PARA DEPO=IS SO PRA LEMBRAR -->
+    <!-- <select name="my-select" id="fruit">
+        <option value="opt1">Apples</option>
+        <option value="opt2">Grapes</option>
+        <option value="opt3">Pears</option>
+      </select>
+ -->

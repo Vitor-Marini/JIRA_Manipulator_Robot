@@ -10,8 +10,6 @@ void taskEsp(void * pvParameters);
 void taskReset(void * pvParameters);
 
 
-
-
 char data_received;//recebe a cor do OpenCV
 int button_reset = 22;
 int speedDEFAULT = 15;
@@ -78,7 +76,6 @@ xTaskCreatePinnedToCore(taskReset, "Task2", 10000, NULL, 1, &Task2, 1);
 
 
 }
-
 
 void loop() {
 
@@ -279,27 +276,19 @@ servo_slow_move_GRIPPER(servo_gripper.read()+1,gripperOPEN,speedDEFAULT);
 
 }
 
+
 void gripper_collect_default(){
 servo_slow_move_GRIPPER(servo_gripper.read()+1,gripperOPEN,speedDEFAULT);
-
 servo_slow_move_FIRST_ARM(servo_first_arm.read()+1,65,speedDEFAULT);
-
 servo_slow_move_SECOND_ARM(servo_second_arm.read()+1,150,speedDEFAULT);
-
 servo_slow_move_GRIPPER_BASE(servo_gipper_base.read()+1,35,speedDEFAULT);
-
 servo_slow_move_GRIPPER(servo_gripper.read()+1,grippeCLOSE,speedDEFAULT);
 delay(1000);
 servo_slow_move_FIRST_ARM(servo_first_arm.read()+1,100,speedDEFAULT);
 delay(2000);
-
 servo_slow_move_GRIPPER_BASE(servo_gipper_base.read()+1,100,speedDEFAULT);
 
 }
-
-
-
-
 
 
 void blue_pos(){

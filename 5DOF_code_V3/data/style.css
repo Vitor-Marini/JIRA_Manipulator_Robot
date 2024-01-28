@@ -1,0 +1,574 @@
+html{
+    font-family: JetBrains Mono;
+    background-color: #acc4ce;
+    display: inline-block;
+    margin: 0px auto;
+    text-align: center;
+    color: rgb(52, 54, 91);
+}
+
+
+.header{
+    border-radius: 0px;
+    text-align: center;
+    background-color: #3981e7;
+    color: white;
+    font-size: 30px;
+    position: fixed;
+    z-index:10;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+
+  .container{
+   margin: 5px;
+    border-radius: 20px;
+    height: 160px;
+    width: 150px;
+    position: relative;
+    box-shadow: 1px 1px 2px #3f3f3d;
+    background-color: #d3d9d3;
+    border:1px solid #d8ebd4;
+    padding: 10px;
+  }
+
+  .flex-container {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os itens se envolvam em novas linhas conforme necessário */
+    justify-content: center; /* Centraliza os itens na linha */
+    align-items: flex-start; /* Alinha os itens ao topo de suas respectivas linhas */
+    /* Outras propriedades conforme necessário */
+}
+
+  .item-wrapper {
+    padding: 0 5px; /* Reduz o espaçamento horizontal */
+    margin-bottom: 5px; /* Reduz o espaçamento vertical */
+}
+.item-wrapper:last-child {
+  padding-right: 0; /* Remove o padding do último wrapper */
+}
+@media (max-width: 768px) {
+  .item-wrapper {
+      padding: 0 5px; /* Ajuste o espaçamento para telas médias */
+  }
+}
+
+@media (max-width: 480px) {
+  .item-wrapper {
+      padding: 0 5px; /* Ajuste o espaçamento para telas pequenas */
+  }
+}
+.flex-item {
+  /* Estilos para os itens individuais */
+  margin: -5px; /* Ajuste conforme necessário para diminuir o espaço */
+}
+
+  .container_data{
+    width: auto;
+    margin: 1 auto;
+    padding: 1px;
+    border: 3px solid #4767c7;
+    border-radius: 20PX;
+    margin-bottom: 1 auto;
+  }
+  
+  .spacer {
+    height: 30px;
+  }
+
+  .text1 {
+    font-family:JetBrains Mono ;
+    color: rgb(52, 54, 91);
+    font-size: 26px;
+    max-height: 0px;
+  }
+
+  
+  
+  
+  [role="progressbar"] {
+    --percentage: var(--value);
+    --primary: #369;
+    --secondary: #adf;
+    --size: 70%;
+    --degress: var(--deg);
+    width: var(--size);
+    aspect-ratio: 2 / 1;
+    border-radius: 50% / 100% 100% 0 0;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: static;
+    transform: translate(20%, 170%);
+  }
+  
+  [role="progressbar"]::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(from 0.75turn at 50% 100%, var(--primary) calc(var(--percentage) * 1% / 2), var(--secondary) calc(var(--percentage) * 1% / 2 + 0.1%));
+    mask: radial-gradient(at 50% 100%, white 55%, transparent 55.5%);
+    mask-mode: alpha;
+    -webkit-mask: radial-gradient(at 50% 100%, #0000 55%, #000 55.5%);
+    -webkit-mask-mode: alpha;
+  }
+  
+  [role="progressbar"]::after {
+    counter-reset: degress var(--deg);
+    content: counter(degress) '°';
+    font-family: JetBrains Mono,Helvetica, Arial, sans-serif;
+    font-size: 25px;
+    color: var(--primary);
+    position: static;
+  }
+
+/* Estilo do cabeçalho */
+
+
+/* Estilo do botão dropdown */
+.dropbtn {
+  background-color: transparent;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  z-index:10;
+  position: absolute;
+  top: -8px;
+}
+
+/* O contêiner <div> - necessário para posicionar o conteúdo dropdown */
+.dropdown {
+  position: fixed;
+  left: 0; /* Alinha o dropdown à esquerda da viewport */
+  top: 0; /* Alinha o dropdown ao topo da viewport */
+}
+
+/* Conteúdo dropdown (links) */
+.dropdown-content {
+  font-family: JetBrains Mono;
+  display: none;
+  position: absolute;
+  background-color: #d9e9fa;
+  border-radius: 20px;
+  border-top-left-radius: 0px;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(6, 93, 232, 0.2);
+  z-index: 10;
+  top: 40px;
+  font-size: 19px;
+}
+
+/* Links dentro do dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: list-item;
+  border-radius: 20px;
+  border-top-left-radius: 0px;
+}
+
+/* Mudar a cor dos links do dropdown ao passar o mouse */
+.dropdown-content a:hover {background-color: #369}
+
+/* Mostrar o dropdown ao passar o mouse sobre o botão dropdown */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Mudar a cor do botão dropdown ao passar o mouse */
+.dropdown:hover .dropbtn {
+  background-color: #2c65b5;
+}
+
+.moveButton{
+  width: 150px;
+  height: 50px;
+  background-color: #2c65b5;
+  color: #ffffff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  text-shadow: 2px 2px 3px #3f3f3d;
+  box-shadow: 2px 2px 3px #3f3f3d;
+  transition: all 0.2s ease-in-out;
+}
+
+.button:hover,.button2:hover {
+  background-color: #84bbe5;
+  color: #c7d9ea;
+  transform: scale(1.1);
+}
+
+
+.switch {
+  display: inline-block;
+  height: 34px;
+  position: relative;
+  width: 60px;
+}
+
+.switch input {
+  display:none;
+}
+
+.slider {
+  background-color: #ccc;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+}
+
+.slider:before {
+  background-color: #fff;
+  bottom: 4px;
+  content: "";
+  height: 26px;
+  left: 4px;
+  position: absolute;
+  transition: .4s;
+  width: 26px;
+}
+
+input:checked + .slider {
+  background-color: #2c65b5;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+
+
+.slider-container {
+  display: flex;
+  flex-direction: row; /* Define a direção dos itens como linha */
+  align-items: center; /* Centraliza os itens verticalmente */
+  justify-content: flex-start; /* Alinha os itens ao início do container */
+  margin: 10px 0; /* Espaçamento entre os sliders */
+}
+
+.slider-container label {
+  display: inline-block;
+  text-align: left;
+  font-size: 18px;
+  margin-right: 8px;
+  white-space: nowrap; /* Impede que o texto quebre em várias linhas */
+  width: 120px; /* Largura fixa para os títulos */
+}
+
+.slider-container input[type="range"] {
+  flex: 1; /* Ocupa o espaço restante na linha */
+  margin-left: 0px; /* Espaçamento entre o título e o slider */
+}
+
+
+
+.slider-container label::before {
+  content: "";
+  display: inline-block;
+  width: 0px; /* Largura fixa para o espaço antes da primeira letra */
+}
+
+.flex-container2 {
+  display: flex;
+  flex-direction: column; /* Define a direção dos itens como coluna */
+  align-items: center; /* Centraliza os itens horizontalmente */
+  justify-content: center; /* Centraliza os itens verticalmente */
+  width: 100%; /* Define a largura do container para a largura total da página */
+}
+
+
+
+
+.custom-slider {
+  -webkit-appearance: none; /* Remove a aparência padrão */
+  width: 220px; /* Largura do custom-slider */
+  height: 10px; /* Altura do trilho do custom-slider */
+  background: #ddd; /* Cor de fundo do trilho */
+  outline: none; /* Remove o contorno ao focar */
+  opacity: 0.7; /* Transparência do custom-slider */
+border-radius: 25px;
+}
+
+
+.custom-slider::-webkit-slider-thumb::after {
+  content: attr(value);
+  position: absolute;
+  bottom: 25px; /* Ajuste a posição conforme necessário */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+.container_data2{
+  margin: 5px;
+  border-radius: 20px;
+  position: relative;
+  box-shadow: 1px 1px 2px #3f3f3d;
+  background-color: #d3d9d3;
+  border:1px solid #d8ebd4;
+  padding: 10px;
+}
+
+.slider-container2 {
+  display: inline-block;
+  text-align: left;
+  font-size: 18px;
+  margin-right: 10px;
+  white-space: nowrap; /* Impede que o texto quebre em várias linhas */
+  width:360px; /* Largura fixa para os títulos */
+
+}
+
+.flex-container-c {
+  display: flex;
+  flex-direction: column; /* Muda a direção dos itens para coluna */
+  align-items: center; /* Centraliza os itens horizontalmente */
+  justify-content: flex-start; /* Alinha os itens ao topo do container */
+}
+
+
+.container-c {
+  display: flex; /* Usa flexbox para alinhar os itens horizontalmente */
+  align-items: center; /* Centraliza os itens verticalmente */
+  justify-content: space-between; /* Distribui o espaço entre os itens */
+  margin: 5px;
+  border-radius: 20px;
+  height: 60px;
+  width: 350px;
+  position: relative;
+  box-shadow: 1px 1px 2px #3f3f3d;
+  background-color: #d3d9d3;
+  border: 1px solid #d8ebd4;
+  padding: 14px;
+}
+
+.angle-input {
+  width: 80px; /* Largura do input */
+  height: 40px;
+  margin-left: 10px; /* Espaçamento entre o select e o input */
+  padding: 5px 10px; /* Padding interno do input */
+  border-radius:10px; /* Bordas arredondadas */
+  border: 1px solid #2c65b5; /* Borda do input */
+  font-size: 20px;
+  background-color: #d3d9d3;
+}
+
+.selectdiv {
+  position: relative;
+  flex-grow: 2;
+}
+
+
+/* IE11 hide native button (thanks Matt!) */
+select::-ms-expand {
+display: none;
+}
+
+.selectdiv::after {
+  content: '<>';
+  font: 17px "Consolas", monospace;
+  color: #333;
+  transform: rotate(90deg);
+  right: 11px;
+  top: 18px;
+  padding: 0 0 2px;
+  border-bottom: 1px solid #999;
+  position: absolute;
+  pointer-events: none;
+}
+
+.selectdiv select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: 50px;
+  margin: 5px 0px;
+  padding: 0px 24px;
+  font-size: 16px;
+  line-height: 1.75;
+  color: #333;
+  background-color: #d3d9d3;
+  border: 1px solid #2c65b5;
+  border-radius: 10px;
+}
+
+.button_plus {
+  position: relative;
+  width: 35px;
+  height: 35px;
+  background: #d3d9d3;
+  cursor: pointer;
+  border: 2px solid #2c65b5;
+border-radius: 25px;
+}
+
+.button_plus:after {
+  content: '';
+  position: absolute;
+  transform: translate(-50%, -50%);
+  height: 4px;
+  width: 50%;
+  background: #2c65b5;
+  top: 50%;
+  left: 50%;
+}
+
+.button_plus:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #2c65b5;
+  height: 50%;
+  width: 4px;
+}
+
+.button_plus:hover:before,
+.button_plus:hover:after {
+  background: #fff;
+  transition: 0.2s;
+}
+
+.button_plus:hover {
+  background-color: #095776;
+  transition: 0.2s;
+}
+
+.closeButton {
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 25px;
+  color: #e49494;
+  left: 94%;
+  top: 0%;
+  border:0.5px solid #095776;
+  border-radius: 100%;
+  border: none;
+}
+
+.gripper-action {
+  /* Estilos para o select do Gripper */
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  font-size: 16px;
+  background-color: #d3d9d3;
+  cursor: pointer;
+  /* Adicione mais estilos conforme necessário */
+}
+
+
+#profileControls {
+  margin-top: 20px; /* Espaçamento acima dos controles do perfil */
+  text-align: center; /* Centraliza os controles */
+}
+
+#profileName {
+
+  font-family: JetBrains Mono;
+  margin-right: 10px; /* Espaçamento entre o campo de entrada e o botão */
+  padding: 10px; /* Padding interno para o campo de entrada */
+  border-radius: 5px; /* Bordas arredondadas para o campo de entrada */
+  border: 1px solid #cccccc; /* Borda do campo de entrada */
+}
+
+#saveProfile {
+  font-family: JetBrains Mono;
+  padding: 10px 20px; /* Padding interno para o botão */
+  border-radius: 5px; /* Bordas arredondadas para o botão */
+  background-color: #095776; /* Cor de fundo para o botão */
+  color: white; /* Cor do texto para o botão */
+  border: none; /* Remove a borda do botão */
+  cursor: pointer; /* Muda o cursor para indicar que é clicável */
+}
+
+#saveProfile:hover {
+  background-color: #3798bf; /* Cor de fundo do botão ao passar o mouse */
+}
+
+
+.selectdiv2 {
+  position: relative;
+  flex-grow: 2;
+}
+
+
+.selectdiv2::after {
+  content: '<>';
+  font: 17px "Consolas", monospace;
+  color: #333;
+  transform: rotate(90deg);
+  right: 11px;
+  top: 18px;
+  padding: 0 0 2px;
+  border-bottom: 1px solid #999;
+  position: absolute;
+  pointer-events: none;
+}
+
+.selectdiv2 select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: 50px;
+  margin: 5px 0px;
+  padding: 0px 24px;
+  font-size: 16px;
+  line-height: 1.75;
+  color: #333;
+  background-color: #d3d9d3;
+  border: 1px solid #2c65b5;
+  border-radius: 10px;
+}
+
+.container-c2 {
+  display: flex; /* Usa flexbox para alinhar os itens horizontalmente */
+  align-items: center; /* Centraliza os itens verticalmente */
+  justify-content: space-between; /* Distribui o espaço entre os itens */
+  margin: 5px;
+  height: 60px;
+  width: 350px;
+  position: relative;
+  padding: 14px;
+}
+
+.flex-container-c2 {
+  display: flex;
+  flex-direction: column; /* Muda a direção dos itens para coluna */
+  align-items: center; /* Centraliza os itens horizontalmente */
+  justify-content: flex-start; /* Alinha os itens ao topo do container */
+}
