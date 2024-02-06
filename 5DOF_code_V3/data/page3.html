@@ -6,7 +6,7 @@
     <link rel="icon" href="data:,">
     <link rel="stylesheet" type="text/css" href="style.css">
     <title>Jira</title>
-  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     
 </head>
 <body>
@@ -14,7 +14,7 @@
     <div class="header">
        
         <div class="dropdown">
-            <button class="dropbtn"></i><i class="fa fa-cog" style="font-size: 25px;"></i></button>
+          <button class="dropbtn">Modes</button>
             <div class="dropdown-content">
                 <a href="/">DashBoard</a>
                 <a href="/page2">Manual Mode</a>
@@ -66,9 +66,11 @@
                 <p id="noProfilesMessage" style="display: none;">Nenhum perfil salvo.</p>
               </div>
             </div>
-            <button style="background-color: lightgreen;"  id="playProfile">PLAY</button>
+            <button class="bt_play" id="playProfile">PLAY</button>
+            
           </div>
-             
+          <div class="spacer"></div>
+          <button class="moveButton" style="background-color: red;" data-position-number="4">Reset</button>
         
         
             

@@ -142,6 +142,7 @@ html{
   z-index:10;
   position: absolute;
   top: -8px;
+  font-style: bold;
 }
 
 /* O contêiner <div> - necessário para posicionar o conteúdo dropdown */
@@ -187,12 +188,13 @@ html{
 /* Mudar a cor do botão dropdown ao passar o mouse */
 .dropdown:hover .dropbtn {
   background-color: #2c65b5;
+  color: #000;
 }
 
 .moveButton{
   width: 150px;
   height: 50px;
-  background-color: #2c65b5;
+  background-color: #4a83d2;
   color: #ffffff;
   padding: 12px 24px;
   border: none;
@@ -571,4 +573,30 @@ border-radius: 25px;
   flex-direction: column; /* Muda a direção dos itens para coluna */
   align-items: center; /* Centraliza os itens horizontalmente */
   justify-content: flex-start; /* Alinha os itens ao topo do container */
+}
+
+
+.bt_play {
+  padding: 12.5px 30px;
+  border: 0;
+  border-radius: 100px;
+  background-color: #2ba8fb;
+  color: #ffffff;
+  font-weight: Bold;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+}
+
+.bt_play:hover {
+  background-color: #6fc5ff;
+  box-shadow: 0 0 20px #6fc5ff50;
+  transform: scale(1.1);
+}
+
+.bt_play:active {
+  background-color: #3d94cf;
+  transition: all 0.25s;
+  -webkit-transition: all 0.25s;
+  box-shadow: none;
+  transform: scale(0.98);
 }

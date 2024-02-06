@@ -370,7 +370,7 @@ void task_pos(void *pvParameters) {
           servo_SECOND_ARM.write(position);
         } else if (servoId == "4") {
          servo_WRIST.write(position);
-        } else if (servoId == "5") {
+        } else if (servoId == "5") { 
           servo_GRIPPER_BASE.write(position);
         }
       }
