@@ -17,17 +17,31 @@ void setup() {
  Serial.println("Rede Wi-Fi criada");
 
 
- // Configura a rota /hello
- server.on("/hello", HTTP_GET, [](AsyncWebServerRequest *request){
-      Serial.println("Hello World");
-      request->send(200, "text/plain", "Hello World");
- });
+  // Nova rota para receber mensagem via POST
+   server.on("/send-message", HTTP_POST, [](AsyncWebServerRequest *request){
+    String message;
+    Serial.println("\nRecebendo mensagem");
+
+    if (request->hasParam("message", true)) {
+      AsyncWebParameter* p = request->getParam("message", true);
+      message = p->value();
+      Serial.print("Mensagem recebida: ");
+      Serial.println(message);
+      if (message == "Hello ESP32!") {
+          request->send(200, "text/plain", "Hello React Native!");
+      } else  {
+          request->send(200, "text/plain", "Mensagem não reconhecida");
+      }
+      //request->send(200, "text/plain", "Mensagem recebida com sucesso");
+    } else {
+      Serial.println("Falhou a mensagem 400");
+      request->send(400, "text/plain", "Parâmetro 'message' não encontrado");
+    }
+  });
 
 
- server.on("/json", HTTP_GET, [](AsyncWebServerRequest *request){
-      String json = "{\"message\": \"Hello, this is a JSON message!\"}";
-       request->send(200, "application/json", json);
- });
+ server.begin();
+  Serial.println("Servidor iniciado");
 
  
  server.begin();
@@ -35,9 +49,4 @@ void setup() {
 
 void loop() {
 
- int numClients = WiFi.softAPgetStationNum();
- Serial.print("Numero de clientes conectados: ");
- Serial.println(numClients);
-
- delay(5000); 
 }
