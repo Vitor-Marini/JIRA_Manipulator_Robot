@@ -1,7 +1,7 @@
 # Projeto Manipulador Robótico
 ## Logo
 
-<img  src="/JIRA.jpeg" alt="J.I.R.A LOGO" width="500" height="500">
+<img  src="/Img/JIRA.jpeg" alt="J.I.R.A LOGO" width="500" height="500">
 
 * [Vídeo Demonstração do Projeto](https://www.youtube.com/watch?v=A0sSD6-C9No)
 
