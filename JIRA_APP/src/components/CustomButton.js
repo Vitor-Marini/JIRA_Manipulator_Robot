@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Platform, Dimensions } from '
 const width = Platform.OS == "web" ? 300 : Dimensions.get('window').width  * 0.80;
 const height = Platform.OS == "web" ? 75 : Dimensions.get('window').height * 0.1;
 
-export default function CustomButton({ onPress, text }) {
+export default function CustomButton({ onPress, text = "PLACEHOLDER", disabled = false }) {
     // Estado para controlar a visibilidade da sombra
     const [isShadowVisible, setIsShadowVisible] = useState(true);
 
@@ -23,10 +23,11 @@ export default function CustomButton({ onPress, text }) {
     return (
         <View style={isShadowVisible ? styles.activeShadow : styles.inactiveShadow}>
             <TouchableOpacity
-                style={styles.button}
+                style={disabled? styles.buttonDisabled : styles.button}
                 onPress={handlePress}
                 onPressIn={handlePressIn}
                 onPressOut={handlePressOut}
+                disabled={disabled}
             >
                 <Text style={styles.textStyle}>{text}</Text>
             </TouchableOpacity>
@@ -40,6 +41,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 15,
         backgroundColor: "#3466DB",
+        width: width,
+        height: height,
+    },
+    buttonDisabled: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 15,
+        backgroundColor: "#8290b0",
         width: width,
         height: height,
     },
