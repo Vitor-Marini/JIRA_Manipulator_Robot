@@ -14,6 +14,11 @@ export default function StartComponent() {
     const [ipAddress, setIpAddress] = useState('');
 
     const [isAlertVisible, setAlertVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [alertTitle, setAlertTitle] = useState("");
+
+    let [contador, setContador] = useState(0);
+    const [buttonText, setButtonText] = useState("Entrar");
 
     const definirIpETestar = async () => {
         try {
@@ -53,16 +58,23 @@ export default function StartComponent() {
             clearTimeout(timeoutId); // Limpa o tempo limite se a solicitação for bem-sucedida
 
             if (response.ok) {
-                Alert.alert('Sucesso', 'Mensagem enviada com sucesso!');
+                setAlertTitle("Verificado");
+                setAlertMessage(`ESP32 encontrada no endereço: ${ip}`);
+                setContador(0);
             } else {
-                Alert.alert('Erro', `Ocorreu um erro ao enviar a mensagem. Status: ${response.status}`);
+                setAlertTitle("Erro na resposta");
+                setAlertMessage(`Status da resposta: ${response.status}`);
+                setContador(contador + 1);
             }
         } catch (error) {
+            setContador(contador + 1);
             if (error.name === 'AbortError') {
-                Alert.alert('Erro', 'Limite de tempo excedido. Verifique se está conectado à rede da ESP32.');
+                setAlertTitle("Erro");
+                setAlertMessage('Limite de tempo excedido. Verifique se está conectado à rede da ESP32.');
             } else {
                 console.error('Erro:', error);
-                Alert.alert('Erro', `Ocorreu um erro ao enviar a mensagem. Detalhes: ${error.message}`);
+                setAlertTitle("Erro ao testar");
+                setAlertMessage('Erro', `Detalhes do erro: ${error.message}`);
             }
         } finally {
             setAlertVisible(true);
@@ -70,12 +82,24 @@ export default function StartComponent() {
         }
     };
 
+    useEffect(() => {
+        if (contador >= 2) {
+            setButtonText("Entrar sem conectar");
+        } else {
+            setButtonText("Entrar");
+        }
+    }, [contador]);
+
     return (
         <View style={styles.container}>
             <Image source={require('../../assets/JIRA.png')} style={styles.image} />
             <CustomButton
-                onPress={() => navigation.navigate("MainGroup")}
-                text={"Entrar"}
+                onPress={() => {
+                    setContador(0); 
+                    setButtonText("Entrar")
+                    navigation.navigate("MainGroup");
+                }}
+                text={buttonText}
                 disabled={isLoading}
             />
             {isLoading ? (
@@ -86,7 +110,12 @@ export default function StartComponent() {
                     text={"Testar Conexão"}
                 />
             )}
-            <CustomAlert visible={isAlertVisible} onDismiss={() => setAlertVisible(false)}/>
+            <CustomAlert
+                visible={isAlertVisible}
+                onDismiss={() => setAlertVisible(false)}
+                title={alertTitle}
+                message={alertMessage}
+            />
         </View>
     );
 }

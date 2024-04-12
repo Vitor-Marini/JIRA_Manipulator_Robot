@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Modal, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Platform } from 'react-native';
 
-const CustomAlert = ({ visible, onDismiss, title ="oi", message = "oi", buttonText = "oi"}) => {
+const CustomAlert = ({ visible, onDismiss, title ="PLACEHOLDER", message = "PLACEHOLDER", buttonText = "OK"}) => {
 
     return (
         <Modal
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "rgba(0, 0, 0, 0.652)",
+        backgroundColor: "rgba(0, 0, 0, 0.717)",
     },
     modalView: {
         margin: 20,
@@ -48,19 +48,19 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-        width: "70%",
-        height: "40%"
+        width: "85%",
+        height: "45%"
     },
     title: {
-        fontSize: 24,
-        color: "#7977FD",
+        fontSize: Platform.OS === "web"? 35 : 24,
+        color: "#00bbff",
         marginBottom: 20,
         textAlign: "center"
     },
     message: {
-        fontSize: 19,
+        fontSize: Platform.OS === "web"? 30 : 19,
         color: '#fff',
-        marginBottom: 15,
+        marginTop: 15,
         textAlign: "center"
     },
     button: {
@@ -70,12 +70,14 @@ const styles = StyleSheet.create({
         paddingLeft: 45,
         paddingRight: 45,
         elevation: 2,
-        marginTop: 15
+        top: Platform.OS === "web"? "80%" : "100%",
+        position: "absolute"
     },
     buttonText: {
         color: "white",
         fontWeight: "bold",
-        textAlign: "center"
+        textAlign: "center",
+        fontSize: 20,
     }
 });
 
