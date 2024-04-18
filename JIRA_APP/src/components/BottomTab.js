@@ -14,7 +14,7 @@ function MyTabs() {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={styles.barShadow}/>
+      {Platform.OS === "ios" ? null : <View style={styles.barShadow}/>}
       <Tab.Navigator
         initialRouteName="Home"
         backBehavior="initialRoute"
@@ -23,6 +23,7 @@ function MyTabs() {
           tabBarShowLabel: false,
           headerShown: false,
           tabBarHideOnKeyboard: false,
+          tabBarIconStyle: {top: Platform.OS === "ios"? "20%" : 0}
         }}
       >
         <Tab.Screen

@@ -1,8 +1,11 @@
 import { Alert, StyleSheet, View } from "react-native";
 import { useEffect, useState } from "react";
 import CustomButton from "../components/CustomButton";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Home() {
+  const navigation = useNavigation();
+
   const message = "Hello ESP32!";
 
   const sendData = async () => {
@@ -33,6 +36,7 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <CustomButton onPress={sendData} text={"Enviar Dados"} />
+      <CustomButton onPress={() => {navigation.navigate("Slider")}} text={"Slider"} />
     </View>
   );
 }

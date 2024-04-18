@@ -42,7 +42,7 @@ export default function StartComponent() {
 
         try {
             // Define um tempo limite para a solicitação
-            const timeoutId = setTimeout(() => controller.abort(), 20000); // Aborta a solicitação após 20 segundos
+            const timeoutId = setTimeout(() => controller.abort(), 1000); // Aborta a solicitação após 20 segundos
 
             const response = await fetch(`http://${ip}/send-test`, {
                 method: 'POST',
