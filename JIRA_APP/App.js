@@ -1,5 +1,4 @@
-import { Alert, StyleSheet, View } from "react-native";
-import CustomButton from "./src/components/CustomButton";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useEffect, useState } from "react";
@@ -20,12 +19,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#001139", //01184D
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
