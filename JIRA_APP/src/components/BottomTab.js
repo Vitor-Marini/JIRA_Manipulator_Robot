@@ -4,17 +4,17 @@ import Home from "../screens/Home";
 import Config from "../screens/Config";
 import { Ionicons } from "@expo/vector-icons";
 import { Dimensions, Platform, StyleSheet, View } from "react-native";
+import ConnectionTest from "../screens/ConnectionTest";
 
-const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
-
   return (
     <View style={{ flex: 1 }}>
-      {Platform.OS === "ios" ? null : <View style={styles.barShadow}/>}
+      {Platform.OS === "ios" ? null : <View style={styles.barShadow} />}
       <Tab.Navigator
         initialRouteName="Home"
         backBehavior="initialRoute"
@@ -23,12 +23,12 @@ function MyTabs() {
           tabBarShowLabel: false,
           headerShown: false,
           tabBarHideOnKeyboard: false,
-          tabBarIconStyle: {top: Platform.OS === "ios"? "20%" : 0}
+          tabBarIconStyle: { top: Platform.OS === "ios" ? "20%" : 0 },
         }}
       >
         <Tab.Screen
           name="Wifi"
-          component={Home}
+          component={ConnectionTest}
           options={{
             tabBarIcon: ({ focused }) => (
               <Ionicons

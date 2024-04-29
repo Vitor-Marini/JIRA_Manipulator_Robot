@@ -1,0 +1,109 @@
+https://dev.to/baloghroli/let-s-build-a-slider-from-scratch-in-react-native-2mal
+
+import React, { useState, useRef } from "react";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Animated,
+  PanResponder,
+} from "react-native";
+
+const SliderTest = () => {
+  const [sliderDimensions, setSliderDimensions] = useState({
+    width: null,
+    left: null,
+    right: null,
+  });
+
+  const stepperAnim = useRef(new Animated.Value(0)).current;
+  const railFillAnim = useRef(new Animated.Value(0)).current;
+
+  const stepperResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderGrant: () => {
+      stepperAnim.setOffset(stepperAnim._value);
+      railFillAnim.setOffset(railFillAnim._value);
+    },
+    onPanResponderMove: (evt, { dx, moveX }) => {
+      if (moveX > sliderDimensions.left && moveX < sliderDimensions.right) {
+        stepperAnim.setValue(dx);
+        railFillAnim.setValue(dx);
+      }
+    },
+    onPanResponderRelease: () => {
+      stepperAnim.flattenOffset();
+      railFillAnim.flattenOffset();
+    },
+  });
+
+  return (
+    <SafeAreaView>
+      <Text style={styles.title}>What's your height?</Text>
+      <View
+        style={styles.slider}
+        onLayout={(evt) => {
+          const { width, x } = evt.nativeEvent.layout;
+          setSliderDimensions({
+            width: width,
+            left: x,
+            right: x + width,
+          });
+        }}
+      >
+        <View style={styles.rail}>
+          <Animated.View
+            style={[styles.railFill, { width: railFillAnim }]}
+          ></Animated.View>
+        </View>
+        <Animated.View
+          {...stepperResponder.panHandlers}
+          style={[
+            styles.stepper,
+            {
+              transform: [{ translateX: stepperAnim }],
+            },
+          ]}
+        />
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  title: {
+    textAlign: "center",
+    fontSize: 20,
+    marginVertical: 50,
+  },
+  slider: {
+    width: "80%",
+    height: 50,
+    marginLeft: "auto",
+    marginRight: "auto",
+    position: "relative",
+    marginBottom: 50,
+  },
+  rail: {
+    width: "100%",
+    height: 20,
+    marginLeft: "auto",
+    marginRight: "auto",
+    backgroundColor: "#DBDBDB",
+  },
+  stepper: {
+    width: 30,
+    height: "100%",
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+  railFill: {
+    height: "100%",
+    backgroundColor: "#CBAA71",
+    position: "absolute",
+    left: 0,
+  },
+});
+
+export default SliderTest;

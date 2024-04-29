@@ -14,7 +14,7 @@ export default function App() {
       <Stack.Navigator screenOptions={{ header: () => null }}>
         <Stack.Screen name="StartScreen" component={StartComponent} />
         <Stack.Screen name="MainGroup" component={MyTabs} />
-        <Stack.Screen name="Slider" component={SliderExample}/>
+        <Stack.Screen name="Slider" component={SliderExample} />
       </Stack.Navigator>
     </NavigationContainer>
   );

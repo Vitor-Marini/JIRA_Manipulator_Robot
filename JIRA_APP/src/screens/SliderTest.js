@@ -1,44 +1,88 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Slider from '@react-native-community/slider';
+import React, { useState, useRef } from "react";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Animated,
+  PanResponder,
+} from "react-native";
+import Slider from "../components/Slider";
 
-const SliderExample = () => {
- const [value, setValue] = useState(0);
+const SliderTest = () => {
+  const [value, setValue] = useState(15);
 
- return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Value: {value}</Text>
+  return (
+    <View
+      style={{
+        flex: 1,
+        alignContent: "center",
+        justifyContent: "center",
+      }}
+    >
       <Slider
-        style={styles.slider}
-        minimumValue={1}
-        maximumValue={180}
-        minimumTrackTintColor="#54f000"
-        maximumTrackTintColor="#000000"
-        thumbTintColor="#000000"
         value={value}
-        onValueChange={(val) => {setValue(val); console.log(val)}}
-        step={1}
+        minimumValue={0}
+        maximumValue={50}
+        onValueChange={(value) => setValue(value)}
+        thumbStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+          width: 25,
+        }}
+        customThumb={
+          <View
+            style={{
+              width: 20,
+              height: 20,
+              overflow: "hidden",
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              borderBottomLeftRadius: 20,
+              borderBottomRightRadius: 20,
+              backgroundColor: "blue",
+            }}
+          />
+        }
+        trackStyle={{ height: 10, borderRadius: 10, margin: 10 }}
       />
     </View>
- );
+  );
 };
 
 const styles = StyleSheet.create({
- container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
- },
- text: {
+  title: {
+    textAlign: "center",
     fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
- },
- slider: {
-    width: 200,
-    height: 40,
- },
+    marginVertical: 50,
+  },
+  slider: {
+    width: "80%",
+    height: 50,
+    marginLeft: "auto",
+    marginRight: "auto",
+    position: "relative",
+    marginBottom: 50,
+  },
+  rail: {
+    width: "100%",
+    height: 20,
+    marginLeft: "auto",
+    marginRight: "auto",
+    backgroundColor: "#DBDBDB",
+  },
+  stepper: {
+    width: 30,
+    height: "100%",
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+  railFill: {
+    height: "100%",
+    backgroundColor: "#CBAA71",
+    position: "absolute",
+    left: 0,
+  },
 });
 
-export default SliderExample;
+export default SliderTest;
