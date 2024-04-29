@@ -7,7 +7,8 @@ import {
   Animated,
   PanResponder,
 } from "react-native";
-import Slider from "../components/Slider";
+import CustomSlider from "../components/CustomSlider";
+import { height, width } from "deprecated-react-native-prop-types/DeprecatedImagePropType";
 
 const SliderTest = () => {
   const [value, setValue] = useState(15);
@@ -18,33 +19,47 @@ const SliderTest = () => {
         flex: 1,
         alignContent: "center",
         justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#001139",
+
       }}
     >
-      <Slider
+      <CustomSlider
+        style={{ width: "90%" }}
+        minimumTrackTintColor={"#0078a3"}
+        maximumTrackTintColor={"#575757"}
         value={value}
         minimumValue={0}
-        maximumValue={50}
-        onValueChange={(value) => setValue(value)}
+        maximumValue={180}
+        onValueChange={(value) => { setValue(value), console.log(value) }}
         thumbStyle={{
           justifyContent: "center",
           alignItems: "center",
+          //width: 25,
+          backgroundColor: "#eeecec",
+          borderWidth: 2,
+          borderColor: "#8a8a8a",
           width: 25,
+          height: 25,
+          borderRadius: 25
         }}
-        customThumb={
-          <View
-            style={{
-              width: 20,
-              height: 20,
-              overflow: "hidden",
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20,
-              backgroundColor: "blue",
-            }}
-          />
-        }
-        trackStyle={{ height: 10, borderRadius: 10, margin: 10 }}
+        step={1}
+        debugTouchArea={false}
+        /*         customThumb={
+                  <View
+                    style={{
+                      width: 20,
+                      height: 20,
+                      overflow: "hidden",
+                      borderTopLeftRadius: 20,
+                      borderTopRightRadius: 20,
+                      borderBottomLeftRadius: 20,
+                      borderBottomRightRadius: 20,
+                      backgroundColor: "blue",
+                    }}
+                  />
+                } */
+        trackStyle={{ height: 25, borderRadius: 10 }}
       />
     </View>
   );
