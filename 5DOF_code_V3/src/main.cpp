@@ -10,6 +10,13 @@
 const char *ssid = "ESP_vitor3";
 const char *password = "senhaforte";
 
+void servoTurnRight();
+
+void servoTurnLeft();
+
+void servoStop();
+
+
 float fakegraus = 120;//debug 
 //Variables
 char serial_in;
@@ -78,6 +85,8 @@ Servo servo_WRIST;
 Servo servo_GRIPPER_BASE;
 Servo servo_GRIPPER;
 
+Servo servo_conveyor;
+
 int count_start = 1;
 
 AsyncWebServer server(80);
@@ -101,6 +110,8 @@ servo_FIRST_ARM.attach(17);
 servo_SECOND_ARM.attach(18);
 servo_BASE.attach(19);
 servo_WRIST.attach(21);
+
+servo_conveyor.attach(23);
 
 Serial.begin(115200);
 
@@ -267,8 +278,6 @@ server.on("/play_profile", HTTP_POST, [](AsyncWebServerRequest *request) {}, NUL
   request->send(200, "text/plain", "Profile loaded successfully");
 });
 
-
-
   server.begin();
   
 }
@@ -277,6 +286,11 @@ server.on("/play_profile", HTTP_POST, [](AsyncWebServerRequest *request) {}, NUL
 
 void loop() {
 ////////////////////
+
+servoTurnRight();
+delay(2000);
+servoTurnLeft();
+delay(2000);
 
 }
 
@@ -606,3 +620,16 @@ move_GRIPPER(servo_GRIPPER.read()+1,gripper_OPEN,default_speed);
 delay(2000);
 home_pos();
 }
+
+
+void servoTurnRight(){
+  servo_conveyor.write(0);
+}
+void servoTurnLeft(){
+  servo_conveyor.write(180);
+}
+void servoStop(){
+  servo_conveyor.write(90);
+}
+
+
