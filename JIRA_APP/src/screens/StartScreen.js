@@ -129,7 +129,7 @@ export default function StartComponent() {
 
   return (
     <View style={styles.container}>
-      <Image source={require("../../assets/JIRA.png")} style={styles.image} />
+      <Image source={require("../../assets/Logo_JIRA2.png")} style={styles.image} />
       <CustomButton
         onPress={() => {
           setContadorTestes(0);

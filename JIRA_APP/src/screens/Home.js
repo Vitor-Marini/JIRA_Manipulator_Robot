@@ -37,6 +37,7 @@ export default function Home() {
     <View style={styles.container}>
       <CustomButton onPress={sendData} text={"Enviar Dados"} />
       <CustomButton onPress={() => {navigation.navigate("Slider")}} text={"Slider"} />
+      <CustomButton onPress={() => {navigation.navigate("Blink")}} text={"Blink"} />
     </View>
   );
 }
