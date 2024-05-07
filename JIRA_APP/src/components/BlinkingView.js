@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Animated, StyleSheet } from 'react-native';
 
-const BlinkingView = ({ isFocused }) => {
- const [opacity] = useState(new Animated.Value(1));
+const BlinkingView = ({ isFocused, children }) => {
+  const [opacity] = useState(new Animated.Value(1));
 
- useEffect(() => {
+  useEffect(() => {
     if (isFocused) {
       Animated.loop(
         Animated.sequence([
@@ -23,21 +23,22 @@ const BlinkingView = ({ isFocused }) => {
     } else {
       opacity.setValue(1);
     }
- }, [isFocused, opacity]);
+  }, [isFocused, opacity]);
 
- return (
+  return (
     <Animated.View style={[styles.blinkingView, { opacity }]}>
       {/* Conteúdo do componente que piscará */}
-    </Animated.View>
- );
+      {children}
+    </Animated.View >
+  );
 };
 
 const styles = StyleSheet.create({
- blinkingView: {
+  blinkingView: {
     width: 100,
     height: 100,
     backgroundColor: 'blue',
- },
+  },
 });
 
 export default BlinkingView;

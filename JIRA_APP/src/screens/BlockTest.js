@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Button, StyleSheet, ScrollView, Text } from "react-native";
-import Slider from "../components/Slider";
+import CustomSlider from "../components/CustomSlider";
 
 const BlockComponent = () => {
   // Estado para armazenar os blocos
@@ -25,7 +25,7 @@ const BlockComponent = () => {
             >
               {/* Renderização do bloco */}
               <Text>{index}</Text>
-              <Slider
+              <CustomSlider
                 value={value}
                 minimumValue={0}
                 maximumValue={50}
