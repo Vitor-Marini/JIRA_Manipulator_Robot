@@ -36,8 +36,24 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <CustomButton onPress={sendData} text={"Enviar Dados"} />
-      <CustomButton onPress={() => {navigation.navigate("Slider")}} text={"Slider"} />
-      <CustomButton onPress={() => {navigation.navigate("Blink")}} text={"Blink"} />
+      <CustomButton
+        onPress={() => {
+          navigation.navigate("Slider");
+        }}
+        text={"Slider"}
+      />
+      <CustomButton
+        onPress={() => {
+          navigation.navigate("Block");
+        }}
+        text={"Block"}
+      />
+      <CustomButton
+        onPress={() => {
+          navigation.navigate("Blink");
+        }}
+        text={"Blink"}
+      />
     </View>
   );
 }
