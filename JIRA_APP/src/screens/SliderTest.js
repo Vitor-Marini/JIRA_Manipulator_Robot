@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+    Platform,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -10,6 +11,7 @@ import CustomButton from "../components/CustomButton";
 import JiraSVG from "../components/JiraSVG";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { WebView } from 'react-native-webview';
 
 const SliderTest = () => {
 
@@ -25,36 +27,75 @@ const SliderTest = () => {
     const [buttonText, setButtonText] = useState("ABRIR GARRA");
     const [isFirstRender, setIsFirstRender] = useState(true);
 
-    
-    const formatCommandSequence = () => {
-        const newCommandSequence = `${valueMainRotation},${valueJoint1},${valueJoint2},${valueJoint3},${valueArmRotation},${isHandOpen? 1 : 0}`;        
-        console.log(newCommandSequence);
+    const sendCommand = (command = "") => {
+        console.log(command);
     }
 
-    useEffect(() => {
-        isFirstRender? setIsFirstRender(false) : formatCommandSequence();
-    }, [isHandOpen]);
+    /*     const formatCommandSequence = () => {
+            const newCommandSequence = `${valueMainRotation},${valueJoint1},${valueJoint2},${valueJoint3},${valueArmRotation},${isHandOpen? 1 : 0}`;        
+            console.log(newCommandSequence);
+        }
+    
+        useEffect(() => {
+            isFirstRender? setIsFirstRender(false) : formatCommandSequence();
+        }, [isHandOpen]); */
 
     const buttonHandler = () => {
         const isOpen = !isHandOpen;
         setHandOpen(isOpen);
-        isOpen? setButtonText("FECHAR GARRA") : setButtonText("ABRIR GARRA");
+        isOpen ? setButtonText("FECHAR GARRA") : setButtonText("ABRIR GARRA");
+        const degree = isOpen ? "1" : "0";
+        sendCommand("6:" + degree);
     }
-    
+
+    const svgPath = require('../../assets/JIRA.png');
+
     return (
         <View style={styles.container}>
-            <JiraSVG style={{ left: 22 }} height="850" width="850" />
-            <TouchableOpacity style={{ position: "absolute", bottom: "91%", right: "89%"}} onPress={() => {navigation.navigate("Home")}}>
-                <Ionicons name={"home-outline"} size={30} color={"#0078a3"}/>
+
+            <JiraSVG style={{ right: 3 }} height="525" width="525" />
+            
+            <TouchableOpacity style={{ position: "absolute", bottom: "91%", right: "89%" }} onPress={() => { navigation.navigate("Home") }}>
+                <Ionicons name={"home-outline"} size={30} color={"#0078a3"} />
             </TouchableOpacity>
-            <SliderComponent style={styles.sliderMainRotation} value={valueMainRotation} setValue={setValueMainRotation} rotation={true} slidingCompleteFunction={formatCommandSequence} />
-            <SliderComponent style={styles.sliderJoint1} value={valueJoint1} setValue={setValueJoint1} slidingCompleteFunction={formatCommandSequence} />
-            <SliderComponent style={styles.sliderJoint2} value={valueJoint2} setValue={setValueJoint2} slidingCompleteFunction={formatCommandSequence} />
-            <SliderComponent style={styles.sliderJoint3} value={valueJoint3} setValue={setValueJoint3} slidingCompleteFunction={formatCommandSequence} />
-            <SliderComponent style={styles.sliderArmRotation} value={valueArmRotation} setValue={setValueArmRotation} rotation={true} slidingCompleteFunction={formatCommandSequence} />
+
+            <SliderComponent
+                style={styles.sliderMainRotation}
+                value={valueMainRotation}
+                setValue={setValueMainRotation}
+                rotation={true}
+                slidingCompleteFunction={() => { sendCommand(`1:${valueMainRotation}`) }}
+            />
+            <SliderComponent
+                style={styles.sliderJoint1}
+                value={valueJoint1}
+                setValue={setValueJoint1}
+                slidingCompleteFunction={() => { sendCommand(`2:${valueJoint1}`) }}
+            />
+            <SliderComponent
+                style={styles.sliderJoint2}
+                value={valueJoint2}
+                setValue={setValueJoint2}
+                slidingCompleteFunction={() => { sendCommand(`3:${valueJoint2}`) }}
+            />
+            <SliderComponent
+                style={styles.sliderJoint3}
+                value={valueJoint3}
+                setValue={setValueJoint3}
+                slidingCompleteFunction={() => { sendCommand(`4:${valueJoint3}`) }}
+            />
+            <SliderComponent
+                style={styles.sliderArmRotation}
+                value={valueArmRotation}
+                setValue={setValueArmRotation}
+                rotation={true}
+                slidingCompleteFunction={() => { sendCommand(`5:${valueArmRotation}`) }}
+            />
+
             <View style={{ position: "absolute", top: "85%" }}>
                 <CustomButton onPress={buttonHandler} text={buttonText} />
             </View>
+
         </View>
     );
 };
