@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-    Platform,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -8,10 +7,16 @@ import {
 } from "react-native";
 import CustomSlider from "../components/CustomSlider";
 import CustomButton from "../components/CustomButton";
-import JiraSVG from "../components/JiraSVG";
+import JiraSVG from "../svgs/JiraSVG";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { WebView } from 'react-native-webview';
+import BlinkingView from "../components/BlinkingView";
+import SVGArmRotationArrow from "../svgs/SVGArmRotationArrow";
+import SVGWristRotationArrow from "../svgs/SVGWristRotationArrow";
+import SVGFlexArrow1 from "../svgs/SVGFlexArrow1";
+import SVGFlexArrow2 from "../svgs/SVGFlexArrow2";
+import SVGFlexArrow3 from "../svgs/SVGFlexArrow3";
+import HelpComponent from "../components/HelpComponent";
 
 const SliderTest = () => {
 
@@ -25,20 +30,18 @@ const SliderTest = () => {
     const [isHandOpen, setHandOpen] = useState(false);
 
     const [buttonText, setButtonText] = useState("ABRIR GARRA");
-    const [isFirstRender, setIsFirstRender] = useState(true);
+
+    const [isFocusedArmRotation, setIsFocusedArmRotation] = useState(false);
+    const [isFocusedWristRotation, setIsFocusedWristRotation] = useState(false);
+    const [isFocusedFlex1, setIsFocusedFlex1] = useState(false);
+    const [isFocusedFlex2, setIsFocusedFlex2] = useState(false);
+    const [isFocusedFlex3, setIsFocusedFlex3] = useState(false);
+
+    const [isModalVisible, setModalVisible] = useState(false);
 
     const sendCommand = (command = "") => {
         console.log(command);
     }
-
-    /*     const formatCommandSequence = () => {
-            const newCommandSequence = `${valueMainRotation},${valueJoint1},${valueJoint2},${valueJoint3},${valueArmRotation},${isHandOpen? 1 : 0}`;        
-            console.log(newCommandSequence);
-        }
-    
-        useEffect(() => {
-            isFirstRender? setIsFirstRender(false) : formatCommandSequence();
-        }, [isHandOpen]); */
 
     const buttonHandler = () => {
         const isOpen = !isHandOpen;
@@ -48,48 +51,100 @@ const SliderTest = () => {
         sendCommand("6:" + degree);
     }
 
-    const svgPath = require('../../assets/JIRA.png');
 
     return (
         <View style={styles.container}>
 
             <JiraSVG style={{ right: 3 }} height="525" width="525" />
-            
+
+            <BlinkingView
+                style={{ position: "absolute", width: 100, height: 100, bottom: "73%", right: "93%" }}
+                isFocused={isFocusedArmRotation}
+                inverted={true}
+            >
+                <SVGArmRotationArrow height="540" width="540" />
+            </BlinkingView>
+
+            <BlinkingView
+                style={{ position: "absolute", width: 100, height: 100, bottom: "71.5%", right: "92%" }}
+                isFocused={isFocusedWristRotation}
+                inverted={true}
+            >
+                <SVGWristRotationArrow height="530" width="530" />
+            </BlinkingView>
+
+            <BlinkingView
+                style={{ position: "absolute", width: 100, height: 100, bottom: "71.5%", right: "92%" }}
+                isFocused={isFocusedFlex1}
+                inverted={true}
+            >
+                <SVGFlexArrow1 height="540" width="540" />
+            </BlinkingView>
+
+            <BlinkingView
+                style={{ position: "absolute", width: 100, height: 100, bottom: "71.5%", right: "92%" }}
+                isFocused={isFocusedFlex2}
+                inverted={true}
+            >
+                <SVGFlexArrow2 height="540" width="540" />
+            </BlinkingView>
+
+            <BlinkingView
+                style={{ position: "absolute", width: 100, height: 100, bottom: "71.5%", right: "92%" }}
+                isFocused={isFocusedFlex3}
+                inverted={true}
+            >
+                <SVGFlexArrow3 height="540" width="540" />
+            </BlinkingView>
+
             <TouchableOpacity style={{ position: "absolute", bottom: "91%", right: "89%" }} onPress={() => { navigation.navigate("Home") }}>
                 <Ionicons name={"home-outline"} size={30} color={"#0078a3"} />
             </TouchableOpacity>
+
+            <Text style={{ position: "absolute", bottom: "91%", textAlign: "center", fontSize: 25, color: "#0078a3", fontWeight: "bold" }}>AJUSTAR POSIÇÕES</Text>
+
+            <TouchableOpacity style={{ position: "absolute", bottom: "91%", right: "2%" }} onPress={() => { setModalVisible(true) }}>
+                <Ionicons name={"help-circle-outline"} size={35} color={"#0078a3"} />
+            </TouchableOpacity>
+
+            <HelpComponent visible={isModalVisible} setModalVisible={setModalVisible} />
 
             <SliderComponent
                 style={styles.sliderMainRotation}
                 value={valueMainRotation}
                 setValue={setValueMainRotation}
                 rotation={true}
-                slidingCompleteFunction={() => { sendCommand(`1:${valueMainRotation}`) }}
+                slidingCompleteFunction={() => { sendCommand(`1:${valueMainRotation}`), setIsFocusedArmRotation(false) }}
+                slidingStartFunction={() => { setIsFocusedArmRotation(true) }}
             />
             <SliderComponent
                 style={styles.sliderJoint1}
                 value={valueJoint1}
                 setValue={setValueJoint1}
-                slidingCompleteFunction={() => { sendCommand(`2:${valueJoint1}`) }}
+                slidingCompleteFunction={() => { sendCommand(`2:${valueJoint1}`), setIsFocusedFlex1(false) }}
+                slidingStartFunction={() => { setIsFocusedFlex1(true) }}
             />
             <SliderComponent
                 style={styles.sliderJoint2}
                 value={valueJoint2}
                 setValue={setValueJoint2}
-                slidingCompleteFunction={() => { sendCommand(`3:${valueJoint2}`) }}
+                slidingCompleteFunction={() => { sendCommand(`3:${valueJoint2}`), setIsFocusedFlex2(false) }}
+                slidingStartFunction={() => { setIsFocusedFlex2(true) }}
             />
             <SliderComponent
                 style={styles.sliderJoint3}
                 value={valueJoint3}
                 setValue={setValueJoint3}
-                slidingCompleteFunction={() => { sendCommand(`4:${valueJoint3}`) }}
+                slidingCompleteFunction={() => { sendCommand(`4:${valueJoint3}`), setIsFocusedFlex3(false) }}
+                slidingStartFunction={() => { setIsFocusedFlex3(true) }}
             />
             <SliderComponent
                 style={styles.sliderArmRotation}
                 value={valueArmRotation}
                 setValue={setValueArmRotation}
                 rotation={true}
-                slidingCompleteFunction={() => { sendCommand(`5:${valueArmRotation}`) }}
+                slidingCompleteFunction={() => { sendCommand(`5:${valueArmRotation}`), setIsFocusedWristRotation(false) }}
+                slidingStartFunction={() => { setIsFocusedWristRotation(true) }}
             />
 
             <View style={{ position: "absolute", top: "85%" }}>
@@ -100,7 +155,7 @@ const SliderTest = () => {
     );
 };
 
-function SliderComponent({ style, value, setValue, rotation = false, slidingCompleteFunction }) {
+function SliderComponent({ style, value, setValue, rotation = false, slidingCompleteFunction, slidingStartFunction }) {
     return (
         <View style={style}>
             <Text style={{ textAlign: "center", color: "white", fontSize: 16 }} >{value}</Text>
@@ -111,6 +166,7 @@ function SliderComponent({ style, value, setValue, rotation = false, slidingComp
                 minimumValue={0}
                 maximumValue={180}
                 onValueChange={(value) => { setValue(value) /*, console.log(value)*/ }}
+                onSlidingStart={slidingStartFunction}
                 onSlidingComplete={slidingCompleteFunction}
                 thumbStyle={{
                     justifyContent: "center",
@@ -185,9 +241,10 @@ const styles = StyleSheet.create({
     sliderArmRotation: {
         top: "21%",
         width: "45%",
-        right: "52%",
+        right: "52.5%",
         position: "absolute"
     },
 });
+
 
 export default SliderTest;
