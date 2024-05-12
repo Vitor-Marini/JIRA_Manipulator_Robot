@@ -6,14 +6,14 @@ const char *ssid = "JIRA_app";
 const char *password = "senhaforte";
 
 
-
 //Variables
-char serial_in;
 int button_reset=22;
 int default_speed=15;
 int base_speed=5;
 int gripper_CLOSE=10;
 int gripper_OPEN=60;
+
+char serial_in;
 int pos_in=0;
 
 //Manual slider control variables
@@ -45,9 +45,7 @@ void move_GRIPPER_BASE(int initialPos,int finalPos,const int speed);
 void move_GRIPPER(int initialPos,int finalPos,const int speed);
 
 //Conveyor belt control functions
-void beltForward();
-void beltBackward();
-void beltStop();
+
 
 
 //POSITION PRESETS
@@ -65,7 +63,7 @@ Servo servo_WRIST;
 Servo servo_GRIPPER_BASE;
 Servo servo_GRIPPER;
 
-Servo servo_conveyor;
+
 
 int count_start = 1;
 
@@ -91,7 +89,7 @@ servo_SECOND_ARM.attach(18);
 servo_BASE.attach(19);
 servo_WRIST.attach(21);
 
-servo_conveyor.attach(23);
+
 
 Serial.begin(115200);
 
@@ -126,8 +124,8 @@ server.on("/servos-endpoint", HTTP_GET, [](AsyncWebServerRequest *request){
   jsonResponse += "\"servo3\": " + String(servo_SECOND_ARM.read()+1) + ","; 
   jsonResponse += "\"servo4\": " + String(servo_WRIST.read()+1) + ","; 
   jsonResponse += "\"servo5\": " + String(servo_GRIPPER_BASE.read()+1) + ","; 
-  jsonResponse += "\"servo6\": " + String(servo_GRIPPER.read()+1) + ",";
-  jsonResponse += "\"servo7\": " + String(servo_conveyor.read()+1) + "";
+  jsonResponse += "\"servo6\": " + String(servo_GRIPPER.read()+1) + "";
+
   jsonResponse += "}";
   
   request->send(200, "application/json", jsonResponse);
@@ -397,15 +395,3 @@ delay(2000);
 home_pos();
 }
 
-
-//Conveyor belt control
-
-void beltForward(){
-  servo_conveyor.write(0);
-}
-void beltBackward(){
-  servo_conveyor.write(180);
-}
-void beltStop(){
-  servo_conveyor.write(90);
-}
