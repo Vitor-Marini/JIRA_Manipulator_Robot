@@ -23,7 +23,14 @@ const HelpComponent = ({ visible, setModalVisible }) => {
             svgFlex2: null,
             svgFlex3: null,
             label: "Rotação",
-            color: "#f1650c"
+            color: "#f1650c",
+            customColor: false,
+            servo1: null,
+            servo2: null,
+            servo3: null,
+            servo4: null,
+            servo5: null,
+            servo6: null
         },
         {
             svg: JiraSVG,
@@ -33,7 +40,31 @@ const HelpComponent = ({ visible, setModalVisible }) => {
             svgFlex2: SVGFlexArrow2,
             svgFlex3: SVGFlexArrow3,
             label: "Flexão/Extensão",
-            color: "#1a56e3" 
+            color: "#1a56e3",
+            customColor: false,
+            servo1: null,
+            servo2: null,
+            servo3: null,
+            servo4: null,
+            servo5: null,
+            servo6: null
+        },
+        {
+            svg: JiraSVG,
+            svgRotation: null,
+            svgRotation2: null,
+            svgFlex1: null,
+            svgFlex2: null,
+            svgFlex3: null,
+            label: "Servos",
+            color: null,
+            customColor: true,
+            servo1: "#c5c59a",
+            servo2: "#b397b3" ,
+            servo3: "#bd75a4",
+            servo4: "#a58ed2",
+            servo5: "#8A2BE2",
+            servo6: "#70129f"
         }
     ];
 
@@ -93,7 +124,16 @@ const HelpComponent = ({ visible, setModalVisible }) => {
                         contentContainerStyle={styles.carouselContainer}>
                         {tutorialData.map((item, index) => (
                             <View key={index} style={styles.slide}>
-                                <item.svg height='420' width='420' />
+                                <item.svg 
+                                    height='420' 
+                                    width='420' 
+                                    servo1Color={item.customColor && item.servo1}
+                                    servo2Color={item.customColor && item.servo2}
+                                    servo3Color={item.customColor && item.servo3}
+                                    servo4Color={item.customColor && item.servo4}
+                                    servo5Color={item.customColor && item.servo5}
+                                    servo6Color={item.customColor && item.servo6}
+                                    />
                                 {renderSvgSafely(item.svgRotation)}
                                 {renderSvgSafely(item.svgRotation2)}
                                 {renderSvgSafely(item.svgFlex1)}
@@ -101,7 +141,7 @@ const HelpComponent = ({ visible, setModalVisible }) => {
                                 {renderSvgSafely(item.svgFlex3)}
                                 <Text style={styles.title}>LEGENDA</Text>
                                 <View style={styles.label}>
-                                    <View style={{ height: 20, width: 20, backgroundColor: item.color }} />
+                                    {item.color && <View style={{ height: 20, width: 20, backgroundColor: item.color }} />}
                                     <Text style={styles.text}>{item.label}</Text>
                                 </View>
                             </View>
@@ -183,7 +223,7 @@ const styles = StyleSheet.create({
         top: screenHeight * 0.7,
         flexDirection: "row",
         alignItems: "center"
-    },   
+    },
     pagination: {
         flexDirection: 'row',
         justifyContent: 'center',
