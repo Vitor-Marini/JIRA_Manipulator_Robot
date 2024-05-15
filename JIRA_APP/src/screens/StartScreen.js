@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import LoadingButton from "../components/LoadingButton";
 import CustomAlert from "../components/CustomAlert";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 /**Componente da tela inicial*/
 export default function StartComponent() {
@@ -18,27 +19,42 @@ export default function StartComponent() {
   const [alertTitle, setAlertTitle] = useState("");
 
   //Contador de testes
-  let [contadorTeste, setContadorTestes] = useState(0);
+  let [isSuccessfullyConnected, setSuccessfullyConnected] = useState(false);
   //Contador de tentativas
   let [contadorTentativas, setContadorTentativas] = useState(0);
   //Texto do botão
   const [buttonText, setButtonText] = useState("Entrar");
 
-  /*     const definirIpETestar = async () => {
-            try {
-                const response = await fetch('https://api.ipify.org?format=json');
-                const data = await response.json();
-                setIpAddress(data.ip);
-                enviarMensagemTeste(data.ip);
-            } catch (error) {
-                console.error('Erro ao obter o endereço IP:', error);
-            }
-        }; */
-
   // Executar ao entrar no aplicativo
   useEffect(() => {
-    enviarMensagemTeste();
+    const fetchAndSendIP = async () => {
+      const ip = await getIPFromStorage();
+      if (ip !== null) {
+        console.log(ip);
+        enviarMensagemTeste(ip);
+      } else {
+        // Usar argumento padrão
+        enviarMensagemTeste();
+      }
+    };
+    fetchAndSendIP();
   }, []);
+
+  const getIPFromStorage = async () => {
+    try {
+      const ip = await AsyncStorage.getItem("@ip_esp32");
+      if (ip === null) {
+        console.log("Ip não encontrado");
+        await AsyncStorage.setItem("@ip_esp32", "192.168.4.1")
+        return null;
+      } else {
+        return ip;
+      }
+    } catch (error) {
+      console.error("Erro ao acesar armazenamento: ", error);
+      return null;
+    }
+  }
 
   /**Enviar mensagem de teste*/
   const enviarMensagemTeste = async (ip = "192.168.4.1", tentativas = 1) => {
@@ -51,7 +67,7 @@ export default function StartComponent() {
       const timeoutId = setTimeout(() => controller.abort(), 3000); // Aborta a solicitação após 3 segundos
 
       // Faz um fetch no IP com o endpoint send-test
-      const response = await fetch(`http://192.168.4.1/send-test`, {
+      const response = await fetch(`http://${ip}/send-test`, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -68,20 +84,19 @@ export default function StartComponent() {
       if (response.ok) {
         const data = await response.text();
         // Verifica se a mensagem é 'ESP32'
-        data === "ESP32"
-          ? (setAlertTitle("Verificado"),
-            setAlertMessage(`ESP32 encontrada no endereço: ${ip}`),
-            setButtonText("Entrar"),
-            setContadorTestes(0)) // Zera contador de testes
-          : (console.log(
-              "Endpoint com resposta fora do esperado. Resposta: ",
-              data
-            ),
-            setAlertTitle("Endpoint desconhecido"),
-            setAlertMessage(
-              "Conectado no endpoint send-test, mas mensagem não recebida"
-            ),
-            setContadorTentativas(tentativas + 1));
+        if (data === "ESP32") {
+          setAlertTitle("Verificado");
+          setAlertMessage(`ESP32 encontrada no endereço: ${ip}`);
+          setButtonText("Entrar");
+          setSuccessfullyConnected(true);
+          setIsLoading(false);
+          setAlertVisible(true);
+          return;
+        } else {
+          setAlertTitle("Endpoint desconhecido");
+          setAlertMessage("Conectado no endpoint send-test, mas mensagem não recebida");
+          setContadorTentativas(tentativas + 1);
+        }
       } else {
         console.log(`Erro na resposta: ${response.status}`);
         setAlertTitle("Erro na resposta");
@@ -102,7 +117,7 @@ export default function StartComponent() {
       } else {
         console.error("Erro:", error);
         setAlertTitle("Erro ao testar");
-        setAlertMessage("Erro", `Detalhes do erro: ${error.message}`);
+        setAlertMessage(`Detalhes do erro: ${error.message}`);
       }
     } finally {
       setAlertVisible(tentativas >= 3);
@@ -113,27 +128,37 @@ export default function StartComponent() {
       // Aguarda 1 segundo antes de tentar novamente
       setTimeout(() => enviarMensagemTeste(ip, tentativas + 1), 1000);
     } else {
-      setContadorTestes(contadorTeste + 1); // Incrementa testes
+      setSuccessfullyConnected(false); // Atribui falso
       setIsLoading(false); // Finaliza o carregamento
     }
   };
 
-  // useEffect para verificar se a cada vez que o contador muda ele se torna >= 2
+  const storeVerification = async (verificado = false) => {
+    try {
+      await AsyncStorage.setItem("@verification_boolean", String(verificado));
+      console.log(verificado);
+    } catch (error) {
+      console.error("Erro ao acessar armazenamento: ", error);
+    }
+  }
+
+  // useEffect para verificar se a cada vez que o contador muda ele se torna >= 1
   useEffect(() => {
-    if (contadorTeste >= 2) {
+    console.log("Conectado com sucesso: " + isSuccessfullyConnected);
+    if (isSuccessfullyConnected === false) {
       setButtonText("Entrar sem conectar");
+      storeVerification(false);
     } else {
       setButtonText("Entrar");
+      storeVerification(true);
     }
-  }, [contadorTeste]);
+  }, [isSuccessfullyConnected]);
 
   return (
     <View style={styles.container}>
       <Image source={require("../../assets/Logo_JIRA2.png")} style={styles.image} />
       <CustomButton
         onPress={() => {
-          setContadorTestes(0);
-          setButtonText("Entrar");
           navigation.navigate("MainGroup");
         }}
         text={buttonText}

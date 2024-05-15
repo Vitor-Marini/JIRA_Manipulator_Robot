@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
 import Config from "../screens/Config";
 import { Ionicons } from "@expo/vector-icons";
-import { Dimensions, Platform, StyleSheet, View } from "react-native";
-import ConnectionTest from "../screens/ConnectionTest";
+import { Dimensions, Keyboard, Platform, StyleSheet, View } from "react-native";
+import DataFromEsp32 from "../screens/DataFromEsp32";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -12,23 +12,35 @@ const screenHeight = Dimensions.get("window").height;
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
+
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShow = () => setIsKeyboardVisible(true);
+    const keyboardDidHide = () => setIsKeyboardVisible(false);
+  
+    Keyboard.addListener('keyboardDidShow', keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', keyboardDidHide);
+  
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
-      {Platform.OS === "ios" ? null : <View style={styles.barShadow} />}
+      {Platform.OS === "ios" ? null : <View style={isKeyboardVisible? { display: 'none' } : styles.barShadow} />}
       <Tab.Navigator
         initialRouteName="Home"
         backBehavior="initialRoute"
         screenOptions={{
-          tabBarStyle: styles.barStyle,
+          tabBarStyle:  styles.barStyle,
           tabBarShowLabel: false,
           headerShown: false,
-          tabBarHideOnKeyboard: false,
           tabBarIconStyle: { top: Platform.OS === "ios" ? "20%" : 0 },
+          tabBarHideOnKeyboard: true
         }}
       >
         <Tab.Screen
           name="Wifi"
-          component={ConnectionTest}
+          component={DataFromEsp32}
           options={{
             tabBarIcon: ({ focused }) => (
               <Ionicons

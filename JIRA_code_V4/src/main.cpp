@@ -142,6 +142,27 @@ server.on("/move_servo", HTTP_POST, [](AsyncWebServerRequest *request) {
   request->send(200, "text/plain", "Servo " + servoId + " moved to position " + String(position));
  });
 
+ //Test endpoint 
+ server.on("/send-test", HTTP_POST, [](AsyncWebServerRequest *request){
+    String message;
+    Serial.println("Recebendo mensagem");
+
+    if (request->hasParam("message", true)) {
+      AsyncWebParameter* p = request->getParam("message", true);
+      message = p->value();
+      Serial.print("Mensagem recebida: ");
+      Serial.println(message);
+      if(message == "connection test"){
+        request->send(200, "text/plain", "ESP32");
+      } else {
+        request->send(200, "text/plain", "Mensagem desconhecida");
+      }
+    } else {
+      Serial.println("Falhou a mensagem 400");
+      request->send(400, "text/plain", "Parâmetro 'message' não encontrado");
+    }
+  });
+
 
 
   server.begin();

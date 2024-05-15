@@ -1,12 +1,26 @@
 import { Alert, StyleSheet, View } from "react-native";
-import { useEffect, useState } from "react";
 import CustomButton from "../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
+import CustomAlert from "../components/CustomAlert";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Home() {
   const navigation = useNavigation();
 
-  const message = "Hello ESP32!";
+  const [isAlertVisible, setAlertVisible] = useState(false);
+
+  useEffect(() => {
+    const getVericationKey = async () => {
+      const value = await AsyncStorage.getItem("@verification_boolean");
+      const verification = value === "true";
+      setAlertVisible(!verification);
+    }
+
+    getVericationKey();
+  }, []);
+
+/*   const message = "Hello ESP32!";
 
   const sendData = async () => {
     try {
@@ -31,11 +45,16 @@ export default function Home() {
       console.error("Erro:", error);
       Alert.alert("Erro", "Ocorreu um erro ao enviar a mensagem.");
     }
-  };
+  }; */
 
   return (
     <View style={styles.container}>
-      <CustomButton onPress={sendData} text={"Enviar Dados"} />
+      <CustomAlert
+        visible={isAlertVisible}
+        onDismiss={() => setAlertVisible(false)}
+        title={"IP não verificado"}
+        message={"Você não está conectado em uma rede ESP32, as funções do aplicativo estarão limitadas. Vá em configurações para alterar o IP e testar."}
+      />
       <CustomButton
         onPress={() => {
           navigation.navigate("Slider");

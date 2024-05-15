@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import CustomSlider from "../components/CustomSlider";
 import CustomButton from "../components/CustomButton";
 import JiraSVG from "../svgs/JiraSVG";
@@ -12,6 +12,7 @@ import SVGFlexArrow1 from "../svgs/SVGFlexArrow1";
 import SVGFlexArrow2 from "../svgs/SVGFlexArrow2";
 import SVGFlexArrow3 from "../svgs/SVGFlexArrow3";
 import HelpComponent from "../components/HelpComponent";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SliderPrograming = () => {
     const navigation = useNavigation();
@@ -33,25 +34,34 @@ const SliderPrograming = () => {
 
     const [isModalVisible, setModalVisible] = useState(false);
 
+    const [isVerified, setVerified] = useState(false);
+    const [ip, setIp] = useState("192.168.4.1");
+
     const sendCommand = async (id, degree) => {
         console.log(`${id}:${degree}`);
-        try {
-            const response = await fetch(`http://192.168.4.1/move_servo`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: new URLSearchParams({
-                    servo: id,
-                    position: degree,
-                }).toString(),
-            });
-
-            if (response.ok) {
-                console.log("Enviado com sucesso!");
+        if(isVerified) {
+            try {
+                const response = await fetch(`http://${ip}/move_servo`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: new URLSearchParams({
+                        servo: id,
+                        position: degree,
+                    }).toString(),
+                });
+    
+                if (response.ok) {
+                    console.log("Enviado com sucesso!");
+                    const data = await response.text();
+                    console.log(data);
+                }
+            } catch (error) {
+                console.error("Erro:", error);
             }
-        } catch (error) {
-            console.error("Erro:", error);
+        } else {
+            console.log("IP não verficado");
         }
     };
 
@@ -62,6 +72,32 @@ const SliderPrograming = () => {
         const degree = isOpen ? "1" : "0";
         sendCommand("6", degree);
     };
+
+    useEffect(() => {
+        const getVericationKey = async () => {
+            const value = await AsyncStorage.getItem("@verification_boolean");
+            const verification = value === "true";
+            console.log(verification);
+            if (verification) {
+                setVerified(true);
+            } else {
+                setVerified(false);
+            }
+        }
+
+        const getIpFromStorage = async () => {
+            const value = await AsyncStorage.getItem("@ip_esp32");
+            if (value !== null) {
+                console.log("ip: ", value);
+                setIp(value);
+            } else {
+                setIp("192.168.4.1")
+            }
+        }
+
+        getIpFromStorage();
+        getVericationKey();
+    }, []);
 
     return (
         <View style={styles.container}>
