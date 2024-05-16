@@ -23,6 +23,8 @@ String servoId;
 int position;
 bool manual=false;
 
+
+
 //free RTOS
 TaskHandle_t Task_ColorMode;
 TaskHandle_t Task_Reset; 
@@ -36,7 +38,6 @@ void task_pos(void*pvParameters);
 void task_manual(void*pvParameters); 
 
 
-void clear_serial();//Clean anything on serial queue
 
 //JIRA control functions
 void move_BASE(int initialPos,int finalPos,const int speed);
@@ -104,6 +105,8 @@ xTaskCreatePinnedToCore(task_manual, "Task_Manual", 10000, NULL, 0, &Task_Manual
 
 WiFi.softAP(ssid, password);
 IPAddress myIP = WiFi.softAPIP();
+Serial.println("Endereço IP:");
+Serial.println(myIP);
  
 
 //Move to preset positions 
@@ -146,27 +149,23 @@ server.on("/move_servo", HTTP_POST, [](AsyncWebServerRequest *request) {
   request->send(200, "text/plain", "Servo " + servoId + " moved to position " + String(position));
  });
 
- //Test endpoint 
- server.on("/send-test", HTTP_POST, [](AsyncWebServerRequest *request){
-    String message;
-    Serial.println("Recebendo mensagem");
 
-    if (request->hasParam("message", true)) {
-      AsyncWebParameter* p = request->getParam("message", true);
-      message = p->value();
-      Serial.print("Mensagem recebida: ");
-      Serial.println(message);
-      if(message == "connection test"){
-        request->send(200, "text/plain", "ESP32");
-      } else {
-        request->send(200, "text/plain", "Mensagem desconhecida");
-      }
-    } else {
-      Serial.println("Falhou a mensagem 400");
-      request->send(400, "text/plain", "Parâmetro 'message' não encontrado");
+server.on("/color_mode", HTTP_GET, [](AsyncWebServerRequest *request) {
+  String colorDetected = "null";
+  if (request->hasParam("color")) {
+   colorDetected = request->getParam("color",true)->value();
+
+    if(colorDetected == "blue"){
+      blue_pos();
+    }else if( colorDetected == "green"){
+      green_pos();
+    }else if(colorDetected == "red"){
+      red_pos();
     }
-  });
-
+  
+  }
+  request->send(200, "text/plain", "Movendo para posição " + String(colorDetected) );
+});
 
 
   server.begin();
@@ -181,12 +180,6 @@ void loop() {
 
 //Functions:
 
-void clear_serial(){
-    while (Serial.available() > 0) {
-        Serial.read(); 
-      }
-      serial_in = 0;
-}
 
 //Tasks:
 
@@ -203,21 +196,6 @@ void task_colormode(void*pvParameters){
   count_start++;
   } 
   
-  if(Serial.available()>0){ 
-    serial_in= Serial.read();
-  }
-  if(serial_in=='1'){
-        blue_pos();
-        clear_serial();
-
-  } else if(serial_in=='2'){
-        green_pos();
-        clear_serial();
-            
-    } else if(serial_in=='3'){
-        red_pos();
-        clear_serial();
-    }
     vTaskDelay(pdMS_TO_TICKS(100));
   }
 
