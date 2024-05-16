@@ -167,6 +167,26 @@ server.on("/color_mode", HTTP_GET, [](AsyncWebServerRequest *request) {
   request->send(200, "text/plain", "Movendo para posição " + String(colorDetected) );
 });
 
+ server.on("/send-test", HTTP_POST, [](AsyncWebServerRequest *request){
+    String message;
+    Serial.println("Recebendo mensagem");
+
+    if (request->hasParam("message", true)) {
+      AsyncWebParameter* p = request->getParam("message", true);
+      message = p->value();
+      Serial.print("Mensagem recebida: ");
+      Serial.println(message);
+      if(message == "connection test"){
+        request->send(200, "text/plain", "ESP32");
+      } else {
+        request->send(200, "text/plain", "Mensagem desconhecida");
+      }
+    } else {
+      Serial.println("Falhou a mensagem 400");
+      request->send(400, "text/plain", "Parâmetro 'message' não encontrado");
+    }
+  });
+
 
   server.begin();
   
@@ -242,7 +262,13 @@ void task_pos(void *pvParameters) {
          servo_WRIST.write(position);
         } else if (servoId == "5") { 
           servo_GRIPPER_BASE.write(position);
-        }
+        }else if (servoId == "6"){
+          if (position == 1){
+            move_GRIPPER(servo_GRIPPER.read()+1,gripper_OPEN,default_speed);
+          }else if(position == 0){
+            move_GRIPPER(servo_GRIPPER.read()+1,gripper_CLOSE,default_speed);
+          }  
+      }
       }
       manual=false;
       mtx.unlock();
