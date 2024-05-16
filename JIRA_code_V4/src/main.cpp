@@ -3,12 +3,17 @@
 #include<ESPAsyncWebServer.h>
 #include<mutex>
 
+#include <sstream>
+#include <string>
+#include <vector>
+
 const char *ssid = "JIRA_app";
 const char *password = "senhaforte";
 
+using namespace std;
 std::mutex mtx;
 
-//Variables
+//Variables -> que disgraça é essa
 int button_reset=22;
 int default_speed=15;
 int base_speed=5;
@@ -18,11 +23,15 @@ int gripper_OPEN=60;
 char serial_in;
 int pos_in=0;
 
+
+
 //Manual slider control variables
 String servoId;
 int position;
 bool manual=false;
-
+//blocos
+bool block = false;
+String block_command;
 
 
 //free RTOS
@@ -30,12 +39,14 @@ TaskHandle_t Task_ColorMode;
 TaskHandle_t Task_Reset; 
 TaskHandle_t Task_Pos; 
 TaskHandle_t Task_Manual;
+TaskHandle_t Task_block;
 
 //Funciton declaration
 void task_colormode(void*pvParameters);
 void task_reset(void*pvParameters); 
 void task_pos(void*pvParameters); 
-void task_manual(void*pvParameters); 
+void task_manual(void*pvParameters);
+void task_block(void*pvParameters);
 
 
 
@@ -100,6 +111,7 @@ xTaskCreatePinnedToCore(task_reset, "Task_Button", 10000, NULL, 1, &Task_Reset, 
 xTaskCreatePinnedToCore(task_colormode, "Task_ColorMode", 10000, NULL, 0, &Task_ColorMode, 0);
 xTaskCreatePinnedToCore(task_pos, "Task_Pos", 10000, NULL, 0, &Task_Pos, 0);
 xTaskCreatePinnedToCore(task_manual, "Task_Manual", 10000, NULL, 0, &Task_Manual, 0);
+xTaskCreatePinnedToCore(task_block, "Task_block", 10000, NULL, 0, &Task_block, 0);
 
 
 
@@ -188,9 +200,23 @@ server.on("/color_mode", HTTP_GET, [](AsyncWebServerRequest *request) {
   });
 
 
+   server.on("/blocks", HTTP_POST, [](AsyncWebServerRequest *request){
+    mtx.lock();
+    if (request->hasParam("command", true)) {
+      block_command = request->getParam("command", true)->value();
+      block = true;
+      request->send(200, "text/plain", "Comando recebido");
+    }else{
+      request->send(400, "text/plain", "Parâmetro 'command' não encontrado");
+    }
+    mtx.unlock();
+  });
+
+
   server.begin();
   
 }
+
 
 
 
@@ -275,6 +301,62 @@ void task_pos(void *pvParameters) {
   }
 } 
 
+  void task_block(void*pvParameters){
+    for(;;){
+      if (block){
+        vector<string> divisaoConjuntos; //Vetor de string que ira receber a divisão por ",";
+        vector<string> split_string;
+        
+        string convertida = block_command.c_str();
+
+        istringstream tokenizer(convertida);
+        string token;
+
+        while (getline(tokenizer, token, ',')){
+            divisaoConjuntos.push_back(token);
+        }
+
+        tokenizer.clear();
+        tokenizer.str("");
+
+        int i = 0;
+        while (i < divisaoConjuntos.size()){
+            if (!divisaoConjuntos.empty()){
+                string split_temp = divisaoConjuntos[i];
+                istringstream tokenizer2(split_temp);
+                string subtoken;
+                while (getline(tokenizer2,subtoken, ':')){
+                  split_string.push_back(subtoken);
+                }
+
+              if (split_string[0] == "servo1"){
+                move_BASE(servo_BASE.read() + 1, stoi(split_string[1]), base_speed);
+              }else if (split_string[0] == "servo2"){
+                move_FIRST_ARM(servo_FIRST_ARM.read() + 1, stoi(split_string[1]), default_speed);
+              }else if (split_string[0] == "servo3"){
+                move_SECOND_ARM(servo_SECOND_ARM.read() + 1, stoi(split_string[1]), default_speed);
+              }else if (split_string[0] == "servo4"){
+                move_WRIST(servo_WRIST.read() + 1, stoi(split_string[1]), default_speed);
+              }else if (split_string[0] == "servo5"){
+                move_GRIPPER_BASE(servo_GRIPPER_BASE.read() + 1, stoi(split_string[1]), default_speed);
+              }else if (split_string[0] == "servo6"){
+                if (stoi(split_string[1]) == 1){
+                  move_GRIPPER(servo_GRIPPER.read()+1,gripper_OPEN,default_speed);
+                }else if(stoi(split_string[1]) == 0){
+                  move_GRIPPER(servo_GRIPPER.read()+1,gripper_CLOSE,default_speed);
+                }                  
+              }
+
+            split_string.clear();
+            }
+
+            i++;
+
+          }
+      }
+   }
+}
+
 //Esp fore-reset task
  void task_reset(void*pvParameters){
     for(;;){
@@ -283,6 +365,7 @@ void task_pos(void *pvParameters) {
     }
   }
 } 
+
 
 
 //Care move servos funcs:
