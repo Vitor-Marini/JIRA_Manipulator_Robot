@@ -1,10 +1,12 @@
 #include <Arduino.h>
 #include<ESP32Servo.h>
 #include<ESPAsyncWebServer.h>
+#include<mutex>
 
 const char *ssid = "JIRA_app";
 const char *password = "senhaforte";
 
+std::mutex mtx;
 
 //Variables
 int button_reset=22;
@@ -133,12 +135,14 @@ server.on("/servos-endpoint", HTTP_GET, [](AsyncWebServerRequest *request){
 
 //Manual slider control 
 server.on("/move_servo", HTTP_POST, [](AsyncWebServerRequest *request) {
+    mtx.lock();
     if (request->hasParam("servo", true) && request->hasParam("position", true)) {
 
         servoId = request->getParam("servo", true)->value();
         position = request->getParam("position", true)->value().toInt();
         manual=true;
      }
+     mtx.unlock();
   request->send(200, "text/plain", "Servo " + servoId + " moved to position " + String(position));
  });
 
@@ -248,6 +252,7 @@ void task_pos(void *pvParameters) {
 //Manual control task
  void task_manual(void*pvParameters){
     for(;;){
+      mtx.lock();
       if(manual){
           if (servoId == "1") {
           servo_BASE.write(position);
@@ -262,6 +267,7 @@ void task_pos(void *pvParameters) {
         }
       }
       manual=false;
+      mtx.unlock();
   }
 } 
 
