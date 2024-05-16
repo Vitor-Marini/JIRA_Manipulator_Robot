@@ -4,7 +4,6 @@ import StartComponent from "./src/screens/StartScreen";
 import MyTabs from "./src/components/BottomTab";
 import SliderPrograming from "./src/screens/SliderPrograming";
 import BlockPrograming from "./src/screens/BlockPrograming";
-import BlinkingTest from "./src/screens/BlinkingTest";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from "react";
 
@@ -45,7 +44,6 @@ export default function App() {
         <Stack.Screen name="MainGroup" component={MyTabs} />
         <Stack.Screen name="Slider" component={SliderPrograming} />
         <Stack.Screen name="Block" component={BlockPrograming} />
-        <Stack.Screen name="Blink" component={BlinkingTest} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -17,11 +17,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const SliderPrograming = () => {
     const navigation = useNavigation();
 
-    const [valueMainRotation, setValueMainRotation] = useState(20);
-    const [valueJoint1, setValueJoint1] = useState(15);
+    const [valueMainRotation, setValueMainRotation] = useState(99);
+    const [valueJoint1, setValueJoint1] = useState(99);
     const [valueJoint2, setValueJoint2] = useState(50);
-    const [valueJoint3, setValueJoint3] = useState(80);
-    const [valueArmRotation, setValueArmRotation] = useState(10);
+    const [valueJoint3, setValueJoint3] = useState(59);
+    const [valueArmRotation, setValueArmRotation] = useState(90);
     const [isHandOpen, setHandOpen] = useState(false);
 
     const [buttonText, setButtonText] = useState("ABRIR GARRA");

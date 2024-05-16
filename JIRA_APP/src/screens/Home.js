@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import CustomButton from "../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import CustomAlert from "../components/CustomAlert";
@@ -59,19 +59,13 @@ export default function Home() {
         onPress={() => {
           navigation.navigate("Slider");
         }}
-        text={"Slider"}
+        text={"Slider SetUp"}
       />
       <CustomButton
         onPress={() => {
           navigation.navigate("Block");
         }}
-        text={"Block"}
-      />
-      <CustomButton
-        onPress={() => {
-          navigation.navigate("Blink");
-        }}
-        text={"Blink"}
+        text={"Programação em Bloco"}
       />
     </View>
   );

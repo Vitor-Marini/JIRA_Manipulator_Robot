@@ -62,6 +62,8 @@ export default function StartComponent() {
     const controller = new AbortController(); // Cria um novo AbortController
     const signal = controller.signal; // Obtém o sinal do AbortController
 
+    let verificado = false
+
     try {
       // Define um tempo limite para a solicitação
       const timeoutId = setTimeout(() => controller.abort(), 3000); // Aborta a solicitação após 3 segundos
@@ -90,8 +92,8 @@ export default function StartComponent() {
           setButtonText("Entrar");
           setSuccessfullyConnected(true);
           setIsLoading(false);
-          setAlertVisible(true);
-          return;
+          verificado = true;
+          tentativas = 3;
         } else {
           setAlertTitle("Endpoint desconhecido");
           setAlertMessage("Conectado no endpoint send-test, mas mensagem não recebida");
@@ -125,11 +127,12 @@ export default function StartComponent() {
 
     // Verifica se já tentou 3 vezes
     if (tentativas < 3) {
-      // Aguarda 1 segundo antes de tentar novamente
       setTimeout(() => enviarMensagemTeste(ip, tentativas + 1), 1000);
     } else {
-      setSuccessfullyConnected(false); // Atribui falso
-      setIsLoading(false); // Finaliza o carregamento
+      if (!verificado) {
+        setSuccessfullyConnected(false); // Atribui falso
+        setIsLoading(false); // Finaliza o carregamento
+      }
     }
   };
 

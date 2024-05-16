@@ -118,7 +118,7 @@ export default function Config() {
             {isLoading ? (
                 <LoadingButton />
             ) : (
-                <CustomButton onPress={sendData} text={"Testar Conexão"} />
+                <CustomButton onPress={sendData} text={"Testar e Definir novo IP"} />
             )}
             <CustomButton
                 text="Redefinir IP"
