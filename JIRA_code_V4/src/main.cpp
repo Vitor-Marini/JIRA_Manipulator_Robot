@@ -164,7 +164,7 @@ server.on("/move_servo", HTTP_POST, [](AsyncWebServerRequest *request) {
  });
 
 
-server.on("/color_mode", HTTP_GET, [](AsyncWebServerRequest *request) {
+server.on("/color_mode", HTTP_POST, [](AsyncWebServerRequest *request) {
   mtx.lock();
   if (request->hasParam("color")) {
    colorDetected = request->getParam("color",true)->value();

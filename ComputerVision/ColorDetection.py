@@ -2,6 +2,8 @@ from utils import get_limits
 import cv2
 import serial
 from threading import Thread
+import requests as rq
+import time 
 
 class VideoSteam:
     def __init__(self,src=0):
@@ -25,10 +27,28 @@ colors = {
 }
 
 
+
 esp32 = serial.Serial('/dev/ttyUSB0',9600)
 
 cap = cv2.VideoCapture(3)
 
+def send_blue_request(url):
+    try:
+        response = rq.post(url,color="blue")
+    except Exception as e:
+        print(f"Falha ao enviar requisição red{str(e)}")
+
+def send_green_request(url):
+    try:
+        response = rq.post(url,color="green")
+    except Exception as e:
+        print(f"Falha ao enviar requisição green{str(e)}")
+
+def send_red_request(url):
+    try:
+        response = rq.post(url,color="red")
+    except Exception as e:
+        print(f"Falha ao enviar requisição red {str(e)}")
 
 
 while True:
@@ -75,11 +95,14 @@ while True:
                     cv2.putText(frame, color_name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
 
                     if color_name == "blue":
-                        esp32.write(b'1')
+                        send_blue_request("http://192.168.4.1/color_mode")
+                        time.sleep(3)
                     elif color_name == "green":
-                         esp32.write(b'2')
+                         send_green_request("http://192.168.4.1/color_mode")
+                         time.sleep(3)
                     else:
-                        esp32.write(b'3')
+                        send_red_request("http://192.168.4.1/color_mode")
+                        time.sleep(3)
 
 
     cv2.imshow('frame', frame)
