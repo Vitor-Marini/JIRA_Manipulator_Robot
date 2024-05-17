@@ -80,31 +80,7 @@ while True:
                          esp32.write(b'2')
                     else:
                         esp32.write(b'3')
-    # Desenha a região de intersse (ROI)
-                
 
-    """
-                OBS: É necessário testar.
-
-                Se mais de uma cor for detectada no vídeo, 
-                o código desenhará a bounding box  e os textos para cada cor detectada. 
-                Porém, o código enviará para a ESP32 apenas um sinal para a última cor detectada na ordem em que foi definido o dicionário de cores.
-
-                colors = {
-                'red': [0, 0, 255],
-                'green': [0, 255, 0],
-                'blue': [255, 0, 0],
-                }
-
-                Isso ocontece porque a lógica if-else para comunicar as cores com o ESP32 está localizada dentro do loop onde nós iteramos sobre os contornos. 
-                Se forem detectadas múltiplas cores, o sinal da última cor detectada substituirá os sinais anteriores.
-                """  
-              #  if color_name == "blue":
-                #    esp32.write(b'1')
-              #  elif color_name == "green":
-               #     esp32.write(b'2')
-             #   else:
-                #    esp32.write(b'3')
 
     cv2.imshow('frame', frame)
 

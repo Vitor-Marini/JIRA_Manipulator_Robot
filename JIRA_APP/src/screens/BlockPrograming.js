@@ -64,7 +64,7 @@ const BlockPrograming = () => {
   const sendCommand = async (command) => {
     if(isVerified){
       try {
-        const response = await fetch(`http://${ip}/oi`, {
+        const response = await fetch(`http://${ip}/blocks`, {
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",

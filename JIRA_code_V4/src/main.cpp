@@ -32,7 +32,9 @@ bool manual=false;
 //blocos
 bool block = false;
 String block_command;
-
+//cor
+String color_mode = "false";
+String colorDetected = "";
 
 //free RTOS
 TaskHandle_t Task_ColorMode;
@@ -163,19 +165,15 @@ server.on("/move_servo", HTTP_POST, [](AsyncWebServerRequest *request) {
 
 
 server.on("/color_mode", HTTP_GET, [](AsyncWebServerRequest *request) {
-  String colorDetected = "null";
+  mtx.lock();
   if (request->hasParam("color")) {
    colorDetected = request->getParam("color",true)->value();
-
-    if(colorDetected == "blue"){
-      blue_pos();
-    }else if( colorDetected == "green"){
-      green_pos();
-    }else if(colorDetected == "red"){
-      red_pos();
-    }
-  
   }
+  if (request->hasParam("color_enable")){
+    color_mode = request->getParam("color_enable",true)->value();
+  }
+
+  mtx.unlock();
   request->send(200, "text/plain", "Movendo para posição " + String(colorDetected) );
 });
 
@@ -241,8 +239,19 @@ void task_colormode(void*pvParameters){
   servo_GRIPPER_BASE.write(100);
   count_start++;
   } 
-  
+  mtx.lock();
+  if(color_mode == "true"){
+     if(colorDetected == "blue"){
+      blue_pos();
+    }else if( colorDetected == "green"){
+      green_pos();
+    }else if(colorDetected == "red"){
+      red_pos();
+    }
+  }
+
     vTaskDelay(pdMS_TO_TICKS(100));
+    mtx.unlock();
   }
 
 }
@@ -303,6 +312,8 @@ void task_pos(void *pvParameters) {
 
   void task_block(void*pvParameters){
     for(;;){
+      mtx.lock();
+    
       if (block){
         vector<string> divisaoConjuntos; //Vetor de string que ira receber a divisão por ",";
         vector<string> split_string;
@@ -327,19 +338,24 @@ void task_pos(void *pvParameters) {
                 string subtoken;
                 while (getline(tokenizer2,subtoken, ':')){
                   split_string.push_back(subtoken);
+                 
                 }
-
-              if (split_string[0] == "servo1"){
+                Serial.println("Cheguei");
+               Serial.println(stoi(split_string[1]));
+               Serial.println("servo KIBUM");
+               Serial.println(stoi(split_string[0]));
+              if (split_string[0] == "1"){
+                Serial.println("servo1");
                 move_BASE(servo_BASE.read() + 1, stoi(split_string[1]), base_speed);
-              }else if (split_string[0] == "servo2"){
+              }else if (split_string[0] == "2"){
                 move_FIRST_ARM(servo_FIRST_ARM.read() + 1, stoi(split_string[1]), default_speed);
-              }else if (split_string[0] == "servo3"){
+              }else if (split_string[0] == "3"){
                 move_SECOND_ARM(servo_SECOND_ARM.read() + 1, stoi(split_string[1]), default_speed);
-              }else if (split_string[0] == "servo4"){
+              }else if (split_string[0] == "4"){
                 move_WRIST(servo_WRIST.read() + 1, stoi(split_string[1]), default_speed);
-              }else if (split_string[0] == "servo5"){
+              }else if (split_string[0] == "5"){
                 move_GRIPPER_BASE(servo_GRIPPER_BASE.read() + 1, stoi(split_string[1]), default_speed);
-              }else if (split_string[0] == "servo6"){
+              }else if (split_string[0] == "6"){
                 if (stoi(split_string[1]) == 1){
                   move_GRIPPER(servo_GRIPPER.read()+1,gripper_OPEN,default_speed);
                 }else if(stoi(split_string[1]) == 0){
@@ -354,7 +370,10 @@ void task_pos(void *pvParameters) {
 
           }
       }
+      block =false;
+      mtx.unlock();
    }
+  
 }
 
 //Esp fore-reset task
