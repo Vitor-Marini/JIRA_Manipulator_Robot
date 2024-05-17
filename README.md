@@ -1,9 +1,19 @@
-# Projeto Manipulador Robótico
-## Logo
+# J.I.R.A
 
-<img  src="/Img/JIRA.jpeg" alt="J.I.R.A LOGO" width="500" height="500">
+## Autores
+
+Felipe Granvile
+Gabriel Reverso Pereira
+Otávio Ribeiro Moreira da Costa
+Vitor Ferraz Marini
+
+<img  src="/Img/Logo_JIRA.png" alt="J.I.R.A LOGO" width="500" height="500">
 
 * [Vídeo Demonstração do Projeto](https://www.youtube.com/watch?v=A0sSD6-C9No)
+
+## Licença 
+
+Creative Commons Attribution-NonCommercial 4.0 International Public License
 
 ## Referências
 
