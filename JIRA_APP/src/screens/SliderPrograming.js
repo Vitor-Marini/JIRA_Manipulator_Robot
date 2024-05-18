@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import CustomSlider from "../components/CustomSlider";
 import CustomButton from "../components/CustomButton";
 import JiraSVG from "../svgs/JiraSVG";
@@ -20,8 +20,8 @@ const SliderPrograming = () => {
     const [valueMainRotation, setValueMainRotation] = useState(99);
     const [valueJoint1, setValueJoint1] = useState(99);
     const [valueJoint2, setValueJoint2] = useState(50);
-    const [valueJoint3, setValueJoint3] = useState(59);
-    const [valueArmRotation, setValueArmRotation] = useState(90);
+    const [valueJoint3, setValueGripperJoint] = useState(59);
+    const [valueArmRotation, setValueWristRotation] = useState(90);
     const [isHandOpen, setHandOpen] = useState(false);
 
     const [buttonText, setButtonText] = useState("ABRIR GARRA");
@@ -39,7 +39,7 @@ const SliderPrograming = () => {
 
     const sendCommand = async (id, degree) => {
         console.log(`${id}:${degree}`);
-        if(isVerified) {
+        if (isVerified) {
             try {
                 const response = await fetch(`http://${ip}/move_servo`, {
                     method: "POST",
@@ -51,7 +51,7 @@ const SliderPrograming = () => {
                         position: degree,
                     }).toString(),
                 });
-    
+
                 if (response.ok) {
                     console.log("Enviado com sucesso!");
                     const data = await response.text();
@@ -73,6 +73,33 @@ const SliderPrograming = () => {
         sendCommand("6", degree);
     };
 
+    const fetchData = () => {
+        fetch(`http://${ip}/servos-endpoint`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Resposta não recebida");
+                }
+                return response.json(); // Parse a resposta como JSON
+            })
+            .then(data => {
+                // Processamento dos dados
+                setValueMainRotation(Number(data.servo1));
+                setValueJoint1(Number(data.servo2));
+                setValueJoint2(Number(data.servo3));
+                setValueWristRotation(Number(data.servo4));
+                setValueGripperJoint(Number(data.servo5));
+                if (Number(data.servo6) >= 5 || Number(data.servo6) <= 15){
+                    setHandOpen(true);
+                } else if (Number(data.servo6) >= 55 || Number(data.servo6) <= 65) {
+                    setHandOpen(false);
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+
+            });
+    }
+
     useEffect(() => {
         const getVericationKey = async () => {
             const value = await AsyncStorage.getItem("@verification_boolean");
@@ -80,6 +107,7 @@ const SliderPrograming = () => {
             console.log(verification);
             if (verification) {
                 setVerified(true);
+                fetchData();
             } else {
                 setVerified(false);
             }
@@ -247,7 +275,7 @@ const SliderPrograming = () => {
             <SliderComponent
                 style={styles.sliderJoint3}
                 value={valueJoint3}
-                setValue={setValueJoint3}
+                setValue={setValueGripperJoint}
                 slidingCompleteFunction={() => {
                     sendCommand("4", `${valueJoint3}`), setIsFocusedFlex3(false);
                 }}
@@ -258,7 +286,7 @@ const SliderPrograming = () => {
             <SliderComponent
                 style={styles.sliderArmRotation}
                 value={valueArmRotation}
-                setValue={setValueArmRotation}
+                setValue={setValueWristRotation}
                 rotation={true}
                 slidingCompleteFunction={() => {
                     sendCommand("5", `${valueArmRotation}`),

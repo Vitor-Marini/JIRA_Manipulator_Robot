@@ -5,6 +5,7 @@ import HelpComponent from "../components/HelpComponent";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomAlert from "../components/CustomAlert";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
 
@@ -29,6 +30,10 @@ const BlockPrograming = () => {
 
   const [isVerified, setVerified] = useState(false);
   const [ip, setIp] = useState("192.168.4.1");
+
+  const [isAlertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertTitle, setAlertTitle] = useState("");
 
   const addBlock = (color, servoID) => {
     // Gere um identificador único para o novo bloco
@@ -82,8 +87,40 @@ const BlockPrograming = () => {
       }
     } else {
       console.log("Ip não verificado");
+      console.log("Height: " + screenHeight);
+      console.log("Widith: " + screenWidth);
     }
   };
+
+  const resetPositions = async () => {
+    if (isVerified) {
+      try {
+        const response = await fetch(`http://${ip}/move_to_position`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            positionNumber: 4,
+          }).toString(),
+        });
+
+        if (response.ok) {
+          console.log("Enviado com sucesso!");
+          setAlertTitle("Posição Redefinida");
+          setAlertMessage("Posições das garras redefinidas com sucesso");
+        }
+      } catch (error) {
+        console.error("Erro:", error);
+        setAlertTitle("Erro");
+        setAlertMessage(`erro: ${error.message}`);
+      } finally {
+        setAlertVisible(true);
+      }
+    } else {
+      console.log("Ip não verificado");
+    }
+  }
 
   useEffect(() => {
     const getVericationKey = async () => {
@@ -115,6 +152,13 @@ const BlockPrograming = () => {
   return (
     <View style={styles.container}>
 
+      <CustomAlert
+        visible={isAlertVisible}
+        onDismiss={() => {setAlertVisible(false)}}
+        title={alertTitle}
+        message={alertMessage}
+      />
+
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
@@ -134,10 +178,6 @@ const BlockPrograming = () => {
         >
           PROGRAMAR EM BLOCO
         </Text>
-
-        {/* <TouchableOpacity style={{ backgroundColor: "#3466DB", width: 100, height: 30 }}>
-                                    
-                                </TouchableOpacity> */}
 
         <TouchableOpacity
           onPress={() => {
@@ -175,7 +215,7 @@ const BlockPrograming = () => {
                     thumbColor={sliderValues[block.id] !== 0 ? "#f5dd4b" : "#f4f3f4"}
                     value={sliderValues[block.id] !== 0 ? true : false}
                     onValueChange={(value) => handleSliderValueChange(block.id, value === true ? 1 : 0)}
-                    style={{ transform: [{ scaleX: 1.6 }, { scaleY: 1.6 }] }}
+                    style={{ transform: [{ scaleX: screenWidth * 0.004166 }, { scaleY: screenHeight * 0.001875}] }} //1.6 padrão
                   />
                 </View>
               ) : (
@@ -264,6 +304,7 @@ const BlockPrograming = () => {
           <TouchableOpacity
             style={styles.actionsButton}
             onPress={() => { setBlocks([]); setSliderValues({}) }}
+            onLongPress={() => {resetPositions()}}
             pointerEvents="box-none"
           >
             <Ionicons name={"close-circle"} size={60} color={"#3466DB"} />

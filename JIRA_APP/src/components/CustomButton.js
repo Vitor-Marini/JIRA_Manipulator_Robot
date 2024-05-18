@@ -1,10 +1,11 @@
+import { onLongPress } from 'deprecated-react-native-prop-types/DeprecatedTextPropTypes';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Platform, Dimensions } from 'react-native';
 
-const width = Platform.OS == "web" ? 300 : Dimensions.get('window').width  * 0.80;
+const width = Platform.OS == "web" ? 300 : Dimensions.get('window').width * 0.80;
 const height = Platform.OS == "web" ? 75 : Dimensions.get('window').height * 0.1;
 
-export default function CustomButton({ onPress, text = "PLACEHOLDER", disabled = false }) {
+export default function CustomButton({ onPress = () => console.log("Placeholder"), text = "PLACEHOLDER", disabled = false, EnableLongPress = false, onLongPress = () => console.log("Placeholder") }) {
     // Estado para controlar a visibilidade da sombra
     const [isShadowVisible, setIsShadowVisible] = useState(true);
 
@@ -20,13 +21,18 @@ export default function CustomButton({ onPress, text = "PLACEHOLDER", disabled =
         onPress();
     };
 
+    const handleLongPress = () => {
+        onLongPress();
+    }
+
     return (
         <View style={isShadowVisible ? styles.activeShadow : styles.inactiveShadow}>
             <TouchableOpacity
-                style={disabled? styles.buttonDisabled : styles.button}
+                style={disabled ? styles.buttonDisabled : styles.button}
                 onPress={handlePress}
                 onPressIn={handlePressIn}
                 onPressOut={handlePressOut}
+                onLongPress={handleLongPress}
                 disabled={disabled}
             >
                 <Text style={styles.textStyle}>{text}</Text>
@@ -57,15 +63,15 @@ const styles = StyleSheet.create({
         color: "#FFFF",
     },
     activeShadow: {
-        backgroundColor: Platform.OS == "web" ? 'rgba(0, 0, 0, 0.3)' :'rgba(0, 0, 0, 0.2)',
-        margin: Platform.OS == "web" ? 10 :"3%",
+        backgroundColor: Platform.OS == "web" ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.2)',
+        margin: Platform.OS == "web" ? 10 : "3%",
         borderRadius: 15,
         width: width + 4,
-        height: height  + 4,
+        height: height + 4,
     },
     inactiveShadow: {
         backgroundColor: 'rgba(0, 0, 0, 0.0)',
-        margin: Platform.OS == "web" ? 10 :"3%",
+        margin: Platform.OS == "web" ? 10 : "3%",
         borderRadius: 13,
         width: width + 4,
         height: height + 4,

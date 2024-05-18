@@ -210,6 +210,12 @@ server.on("/color_mode", HTTP_POST, [](AsyncWebServerRequest *request) {
     mtx.unlock();
   });
 
+  //Reseta ESP
+server.on("/force-stop", HTTP_GET, [](AsyncWebServerRequest *request){
+  //CODIGO DE RESET
+  request->send(200, "txt/plain", "Braço parado com sucesso");
+});
+
 
   server.begin();
   
