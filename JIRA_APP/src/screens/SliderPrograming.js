@@ -17,10 +17,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const SliderPrograming = () => {
     const navigation = useNavigation();
 
-    const [valueMainRotation, setValueMainRotation] = useState(99);
+    const [valueMainRotation, setValueMainRotation] = useState(90);
     const [valueJoint1, setValueJoint1] = useState(99);
-    const [valueJoint2, setValueJoint2] = useState(50);
-    const [valueJoint3, setValueGripperJoint] = useState(59);
+    const [valueJoint2, setValueJoint2] = useState(59);
+    const [valueJoint3, setValueGripperJoint] = useState(90);
     const [valueArmRotation, setValueWristRotation] = useState(90);
     const [isHandOpen, setHandOpen] = useState(false);
 
@@ -67,9 +67,9 @@ const SliderPrograming = () => {
 
     const buttonHandler = () => {
         const isOpen = !isHandOpen;
-        setHandOpen(isOpen);
+        setHandOpen(isOpen); 
         isOpen ? setButtonText("FECHAR GARRA") : setButtonText("ABRIR GARRA");
-        const degree = isOpen ? "1" : "0";
+        const degree = isOpen ? "1" : "0"; 
         sendCommand("6", degree);
     };
 
@@ -88,10 +88,15 @@ const SliderPrograming = () => {
                 setValueJoint2(Number(data.servo3));
                 setValueWristRotation(Number(data.servo4));
                 setValueGripperJoint(Number(data.servo5));
-                if (Number(data.servo6) >= 5 || Number(data.servo6) <= 15){
-                    setHandOpen(true);
-                } else if (Number(data.servo6) >= 55 || Number(data.servo6) <= 65) {
+                const servo6position = parseInt(data.servo6, 10);
+                if (servo6position <= 20){
+                    // Garra fechada -> receber 1 para abrir
                     setHandOpen(false);
+                    setButtonText("ABRIR GARRA");
+                } else {
+                    // Garra aberta -> receber 0 para fechar
+                    setHandOpen(true);
+                    setButtonText("FECHAR GARRA");
                 }
             })
             .catch(error => {

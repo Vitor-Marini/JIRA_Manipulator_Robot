@@ -78,12 +78,11 @@ export default function Home() {
           }
           return response;
         })
-        .then(data => {
-          console.log(data);
+        .then(response => response.text()) 
+        .then(text => {
+          console.log(text);
           setAlertTitle("Bem Sucedido");
-          setAlertMessage(
-            String(data)
-          );
+          setAlertMessage(text); 
         })
         .catch(error => {
           console.error('Erro:', error);
@@ -116,7 +115,7 @@ export default function Home() {
           if (response.message === "ativado") {
             setAlertMessage("Modo de cor ativado com sucesso");
             setAlertTitle("Modo de cor");
-          } else if (response.message === "desativado"){
+          } else if (response.message === "desativado") {
             setAlertMessage("Modo de cor desativado com sucesso");
             setAlertTitle("Modo de cor");
           }
@@ -147,7 +146,7 @@ export default function Home() {
           onPress={() => {
             const modeEnabled = !isColorModeEnabled
             setColorModeEnabled(modeEnabled);
-            colorModeEnable(modeEnabled);
+            //colorModeEnable(modeEnabled);
           }}
           text={isColorModeEnabled ? "Desativar Modo de Cores" : "Ativar Modo de Cores"}
         />
@@ -170,7 +169,7 @@ export default function Home() {
           text={"Resetar Posições"}
         />
         <CustomButton
-          enableLongPress = {true}
+          enableLongPress={true}
           onLongPress={() => {
             forceStop();
           }}
