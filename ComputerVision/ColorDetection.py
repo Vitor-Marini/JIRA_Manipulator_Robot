@@ -30,23 +30,26 @@ colors = {
 
 esp32 = serial.Serial('/dev/ttyUSB0',9600)
 
-cap = cv2.VideoCapture(3)
+cap = cv2.VideoCapture(1)
 
 def send_blue_request(url):
     try:
-        response = rq.post(url,color="blue")
+        response = rq.get(url)
+        print(response.status_code)
     except Exception as e:
         print(f"Falha ao enviar requisição red{str(e)}")
 
 def send_green_request(url):
     try:
-        response = rq.post(url,color="green")
+        response = rq.get(url)
+        print(response.status_code)
     except Exception as e:
         print(f"Falha ao enviar requisição green{str(e)}")
 
 def send_red_request(url):
     try:
-        response = rq.post(url,color="red")
+        response = rq.get(url)
+        print(response.status_code)
     except Exception as e:
         print(f"Falha ao enviar requisição red {str(e)}")
 
@@ -95,14 +98,14 @@ while True:
                     cv2.putText(frame, color_name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
 
                     if color_name == "blue":
-                        send_blue_request("http://192.168.4.1/color_mode")
-                        time.sleep(3)
+                        send_blue_request("http://192.168.4.1/blue")
+                        time.sleep(30)
                     elif color_name == "green":
-                         send_green_request("http://192.168.4.1/color_mode")
-                         time.sleep(3)
+                         send_green_request("http://192.168.4.1/green")
+                         time.sleep(30)
                     else:
-                        send_red_request("http://192.168.4.1/color_mode")
-                        time.sleep(3)
+                        send_red_request("http://192.168.4.1/red")
+                        time.sleep(30)
 
 
     cv2.imshow('frame', frame)
