@@ -69,38 +69,38 @@ export default function Home() {
     }
   }
 
-  const forceStop = async () => {
-    if (isVerified) {
-      fetch(`http://${ip}/force-stop`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("Resposta não recebida");
-          }
-          return response;
-        })
-        .then(response => response.text()) 
-        .then(text => {
-          console.log(text);
-          setAlertTitle("Bem Sucedido");
-          setAlertMessage(text); 
-        })
-        .catch(error => {
-          console.error('Erro:', error);
-          setAlertTitle("Erro");
-          setAlertMessage(`erro: ${error.message}`);
-        })
-        .finally(() => {
-          setAlertVisible(true);
-        });
-    } else {
-      console.log("Ip não verificado");
-    }
-  }
+  /*   const forceStop = async () => {
+      if (isVerified) {
+        fetch(`http://${ip}/force-stop`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Resposta não recebida");
+            }
+            return response;
+          })
+          .then(response => response.text()) 
+          .then(text => {
+            console.log(text);
+            setAlertTitle("Bem Sucedido");
+            setAlertMessage(text); 
+          })
+          .catch(error => {
+            console.error('Erro:', error);
+            setAlertTitle("Erro");
+            setAlertMessage(`erro: ${error.message}`);
+          })
+          .finally(() => {
+            setAlertVisible(true);
+          });
+      } else {
+        console.log("Ip não verificado");
+      }
+    } */
 
   const colorModeEnable = async (modeEnabled = false) => {
     if (isVerified) {
       try {
-        const response = await fetch(`http://${ip}/color_mode`, {
+        const response = await fetch(`http://${ip}/color_mode_enable`, {
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -112,12 +112,12 @@ export default function Home() {
 
         if (response.ok) {
           console.log("Enviado com sucesso!");
-          if (response.message === "ativado") {
+          if (response.message === "true") {
+            setAlertTitle("Modo de cor");
             setAlertMessage("Modo de cor ativado com sucesso");
+          } else if (response.message === "false") {
             setAlertTitle("Modo de cor");
-          } else if (response.message === "desativado") {
             setAlertMessage("Modo de cor desativado com sucesso");
-            setAlertTitle("Modo de cor");
           }
         }
       } catch (error) {
@@ -146,35 +146,42 @@ export default function Home() {
           onPress={() => {
             const modeEnabled = !isColorModeEnabled
             setColorModeEnabled(modeEnabled);
-            //colorModeEnable(modeEnabled);
+            colorModeEnable(modeEnabled);
           }}
           text={isColorModeEnabled ? "Desativar Modo de Cores" : "Ativar Modo de Cores"}
         />
         <CustomButton
+          disabled = {isColorModeEnabled}
           onPress={() => {
             navigation.navigate("Slider");
           }}
           text={"Programação Slider"}
         />
         <CustomButton
+          disabled = {isColorModeEnabled}
           onPress={() => {
             navigation.navigate("Block");
           }}
           text={"Programação em Bloco"}
         />
         <CustomButton
-          onPress={() => {
+          disabled = {isColorModeEnabled}
+          enableLongPress={true}
+          onLongPress={() => {
             resetPositions();
           }}
-          text={"Resetar Posições"}
+          text={"Segurar p/ Resetar"}
         />
+        {/*
         <CustomButton
+          disabled = {isColorModeEnabled}
           enableLongPress={true}
           onLongPress={() => {
             forceStop();
           }}
           text={"Segurar p/ Forçar Parada"}
         />
+        */}
       </ScrollView>
     </View>
   );

@@ -33,13 +33,11 @@ bool manual=false;
 bool block = false;
 String block_command;
 //cor
-//cor
-String color_mode = "true";
 String colorDetected = "";
+bool color_mode = false;
 bool blue = false;
 bool red = false;
 bool green = false;
-bool colorRequest=true;
 
 //free RTOS
 TaskHandle_t Task_ColorMode;
@@ -169,16 +167,45 @@ void setup(){
   });
 
 
-  server.on("/color_mode", HTTP_POST, [](AsyncWebServerRequest *request) {
-    //mtx.lock();
-    if (request->hasParam("color")) {
-    colorDetected = request->getParam("color",true)->value();
+  server.on("/color_mode_enable", HTTP_POST, [](AsyncWebServerRequest *request) {
+    mtx.lock();
+    String response;
+    if (request->hasParam("enable")){
+      response = request->getParam("enable",true)->value();
+      if (response == "true"){
+        color_mode = true;
+      } else {
+        color_mode = false;
+      }
     }
-    if (request->hasParam("color_enable")){
-      color_mode = request->getParam("color_enable",true)->value();
-    }
+    mx.unlock();
+    request->send(200, "text/plain", response );
+  });
 
-    //mtx.unlock();
+  server.on("/blue", HTTP_GET, [](AsyncWebServerRequest *request) {
+    mtx.lock();
+    blue = true;
+    red = false;
+    green = false;
+    mtx.unlock();
+    request->send(200, "text/plain", "Movendo para posição " + String(colorDetected) );
+  });
+
+  server.on("/red", HTTP_GET, [](AsyncWebServerRequest *request) {
+    mtx.lock();
+    blue = false;
+    red = true;
+    green = false;
+    mtx.unlock();
+    request->send(200, "text/plain", "Movendo para posição " + String(colorDetected) );
+  });
+
+  server.on("/green", HTTP_GET, [](AsyncWebServerRequest *request) {
+    mtx.lock();
+    blue = false;
+    red = false;
+    green = true;
+    mtx.unlock();
     request->send(200, "text/plain", "Movendo para posição " + String(colorDetected) );
   });
 
@@ -216,10 +243,10 @@ void setup(){
   });
 
   //Reseta ESP
-  server.on("/force-stop", HTTP_GET, [](AsyncWebServerRequest *request){
+  /* server.on("/force-stop", HTTP_GET, [](AsyncWebServerRequest *request){
     //CODIGO DE RESET
     request->send(200, "txt/plain", "Braço parado com sucesso");
-  });
+  }); */
 
 server.on("/blue", HTTP_GET, [](AsyncWebServerRequest *request) {
     mtx.lock();
@@ -285,10 +312,8 @@ void task_colormode(void*pvParameters){
       count_start++;
     } 
     mtx.lock();
- 
-    if(colorRequest){
-      if(color_mode == "true"){
-        colorRequest = false;
+    if(color_mode){
+      Serial.println("\n***Color Mode Task***");
       if(blue){
         Serial.println("Cor detectada: Azul");
         blue_pos();
@@ -303,9 +328,6 @@ void task_colormode(void*pvParameters){
       green = false;
       blue = false;
     }
-    colorRequest = true;
-    }
- 
     mtx.unlock();
 
     vTaskDelay(pdMS_TO_TICKS(100));

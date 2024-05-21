@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView, Text, TouchableOpacity, Dimensions, Switch } from "react-native";
+import { View, StyleSheet, ScrollView, Text, TouchableOpacity, Dimensions, Switch, Platform } from "react-native";
 import CustomSlider from "../components/CustomSlider";
 import HelpComponent from "../components/HelpComponent";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,6 +8,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomAlert from "../components/CustomAlert";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
+const transformX = Platform.OS === "ios"? 0.0033328 : 0.004166;
+const transformY = Platform.OS === "ios"? 0.0015000 : 0.001875;
 
 const servoTypes = {
   "Servo 1": ["Base", "Rotação"],
@@ -215,7 +217,7 @@ const BlockPrograming = () => {
                     thumbColor={sliderValues[block.id] !== 0 ? "#f5dd4b" : "#f4f3f4"}
                     value={sliderValues[block.id] !== 0 ? true : false}
                     onValueChange={(value) => handleSliderValueChange(block.id, value === true ? 1 : 0)}
-                    style={{ transform: [{ scaleX: screenWidth * 0.004166 }, { scaleY: screenHeight * 0.001875}] }} //1.6 padrão
+                    style={{ transform: [{ scaleX: screenWidth * transformX }, { scaleY: screenHeight * transformY}] }} //1.6 padrão
                   />
                 </View>
               ) : (
