@@ -9,7 +9,7 @@ Vitor Ferraz Marini
 
 <img  src="/Img/Logo_JIRA.png" alt="J.I.R.A LOGO" width="500" height="500">
 
-* [Vídeo Demonstração do Projeto](https://www.youtube.com/watch?v=A0sSD6-C9No)
+* [Vídeo Demonstração do Projeto](https://www.youtube.com/watch?v=wC7iCR1UBZc&t=56s)
 
 ## Licença 
 
